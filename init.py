@@ -1,0 +1,279 @@
+import streamlit as st
+
+from dotenv import load_dotenv
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from annotated_text import annotated_text,annotation
+from utils.changelog import changelog_markdown
+from utils.session_state import *
+from utils.docs_parse import *
+from utils.callback import CustomHandler
+from utils.helpers import *
+from models.agents import agents_classes
+from utils.multi_modal import st_multi_modal
+load_dotenv()
+
+
+import json
+
+def delete_messages():
+    try:
+        messages_session_state().clear()
+        executor_session_state().memory.clear() 
+    except:
+        print('No Memory for agent')
+def get_vectorstore(documents):
+    embeddings = OpenAIEmbeddings()
+    text_splitter = CharacterTextSplitter(
+        chunk_size =1000,
+        chunk_overlap = 0,
+        separator= "\n"
+    )
+    
+    docs = text_splitter.split_documents(documents=documents)
+    if(len(docs) == 0):
+        return False
+    else:
+        for idx, doc in enumerate(docs, start=1):
+            doc.metadata['doc_id'] = idx
+            doc.metadata['source'] = doc.metadata['source'].split("\\")[-1]
+        vectorstore = FAISS.from_documents(documents=docs, embedding=embeddings)
+        return vectorstore
+
+
+def get_conversation_chain():
+    st.progress(100, text=f'Getting Agents')
+    datatype = st.session_state.data_type
+    embeddings = OpenAIEmbeddings()
+    try:
+        vectorstore = FAISS.load_local(f"dataset/{datatype}/vector", embeddings)
+    except:
+        vectorstore = False
+    try:
+        csvs = get_file_names(f"dataset/{st.session_state.data_type}/tables")
+    except:
+        csvs = False
+    try:
+        images = json.loads(open(f'dataset/{st.session_state.data_type}/images/metadata.json', 'r').read())
+    except:
+        images = False
+    conversation_chain = {}
+    for el in agents_classes:
+        arguments = agents_classes[el]['arguments']
+        parameters = {}
+        included = True
+        for arg in arguments:
+            value = eval(arg)
+            if not value:
+                included = False
+                break
+            parameters[arg] = eval(arg)
+        if included:
+            conversation_chain[el] = {
+                "executor":agents_classes[el]['func'](**parameters),
+                "messages":[]
+            }
+    if len(conversation_chain) == 0:
+        return False
+    st.session_state['conversation_chain'] = conversation_chain
+    return True
+def visualize(user_question):
+
+    message_placeholder = st.container()
+    return executor_session_state()({
+        "input":user_question
+    },callbacks = [CustomHandler(message_placeholder = message_placeholder)])
+
+
+
+def handle_userinput(user_question):
+
+    with st.chat_message("user"):
+        st.markdown(user_question)
+    messages_session_state().append({"role": "user", "content": user_question})
+    messages_session_state().append({"role": "assistant", "content": ""})
+
+    with st.chat_message("assistant"):
+        visualize(user_question = user_question)
+    if "source_documents" in messages_session_state()[-1]:
+        display_buttons_in_columns(3,messages_session_state()[-1]["source_documents"])
+
+    
+    
+def process(files):
+    documents = []
+    remove_dir('dataset/process')
+    os.makedirs('dataset/process/tables')
+    os.makedirs('dataset/process/images')
+    os.makedirs('dataset/process/vector')
+    #images_metadata = {}
+
+    for i,file in enumerate(files):
+        st.progress((i)/len(files), text=f'Processing {file.name}')
+        if file.name.endswith('.pdf'):
+            docs = parse_pdf(file)
+            documents.extend(docs)
+        elif file.name.endswith('.csv'):
+            parse_csv(file)
+        elif file.name.endswith('.pptx'):
+            docs = parse_pptx(file)
+            documents.extend(docs)
+        elif file.name.endswith('.links.txt'):
+            docs = parse_links(file)
+            documents.extend(docs)
+        elif file.name.endswith('.txt'):
+            docs = parse_txt(file)
+            documents.extend(docs)
+        elif file.name.endswith('.docx'):
+            docs = parse_docx(file)
+            documents.extend(docs)
+        elif file.name.endswith('.png') or file.name.endswith('.jpg') or file.name.endswith('.jpeg'):
+            print(file)
+            docs = parse_image(file)
+            print(docs)
+            documents.extend(docs)
+            #file_path,metadata = parse_image(file)
+            #images_metadata[file_path] = metadata
+        elif file.name.endswith('.mp3'):
+            docs = parse_audio(file)
+            documents.extend(docs)
+        st.session_state.files.append(file.name)
+    #with open('dataset/process/images/metadata.json', "w") as json_file:
+    #    json.dump(images_metadata, json_file, indent=4)
+    remove_dir('temp')
+
+    # create vector store
+    vectorstore = get_vectorstore(documents)
+    
+
+    if(vectorstore):
+        vectorstore.save_local("dataset/process/vector")
+   
+def show_source(source,documents):
+    with st.sidebar:
+        st.subheader(f"Source: {source}")
+        for doc in documents:
+            st.write(f"...{doc.page_content}...")
+            st.write('----')
+
+count = 0 
+def display_buttons_in_columns(num_columns, values):
+    global count
+
+    # Calculate the number of rows needed to display the values
+    num_rows = -(-len(values) // num_columns)  # Ceiling division
+    sources = list(values.keys())
+
+    # Create a grid layout with the specified number of columns
+    col_width = 12 // num_columns
+    for row in range(num_rows):
+        cols = st.columns(num_columns)
+        for col_idx, col in enumerate(cols):
+            value_idx = row * num_columns + col_idx
+            if value_idx < len(values):
+                source = sources[value_idx]
+                count = count+1
+                col.button(source,key=f'b{count}',use_container_width=True,on_click=show_source,args=(source,values[source],))
+def agent_changed():
+    st.session_state.agent_changed = True
+
+
+def main():
+    st.set_page_config(page_title="Chat with Anything",
+                       page_icon=":exploding_head:")
+    
+
+   
+    init_session_state()
+    
+    subheader = st.empty()
+    place = st.empty()
+    
+    with place:
+        annotated_text(
+                annotation(f"Chat with Anything",background="transparent",fontSize="40px",fontWeight="bold"),
+                annotation("pre-alpha", "v0.0.2",background="#afa",fontSize="18px"),
+        )    
+    
+    if not st.session_state.processed:
+        remove_dir('output')
+        remove_dir('dataset/process')
+        st.subheader("Your documents")
+        pdf_docs = st.file_uploader(
+            "Upload your Documents here and click on 'Process'", accept_multiple_files=True,type=["txt","pdf","png","mp3","docx","csv","jpg"])
+        process_button = st.button("Process",use_container_width=True,type='primary')
+        
+        trained_button = st.button("Trained Data",use_container_width=True)
+        
+        if process_button:
+            my_bar = st.progress(0, text="Operation in progress")
+            with my_bar:
+                process(pdf_docs)
+                st.session_state.data_type  = "process"
+                c = get_conversation_chain()
+                if (c):
+                    st.session_state.processed = True
+                    st.experimental_rerun()
+                else:
+                    st.session_state.data_type  = None
+                    st.error('No Agents Avaialable')
+        if trained_button:
+            st.session_state.data_type  = "trained"
+            get_conversation_chain()   
+            st.session_state.processed = True
+            st.experimental_rerun()     
+        with st.expander("## ChangeLog"):
+            st.markdown(changelog_markdown)
+    else:
+        
+        with st.sidebar:
+            if st.button('Retry',type="primary",use_container_width=True):
+                reset_session_state()
+            
+            with st.expander("Uploaded Files"):
+                st.write(', '.join(st.session_state.files))
+            option = st.selectbox(
+                "Select an Agent",
+                st.session_state.conversation_chain.keys(),
+                placeholder="Select Your Agent",
+                on_change=agent_changed,
+            )
+            
+            if option:
+                eval(agents_classes[option]["annotated"])
+                if(st.session_state.agent != option):
+                    change_agent_session_state(option)
+            with place:
+                col1,col2 = st.columns([11,1])
+                with col1:
+                    annotated_text(
+                        annotation(f"""{option}""",background="transparent",fontSize="28px",fontWeight="bold"),
+                    ) 
+                with col2:
+                    st.button('↺',type="primary",use_container_width=True,on_click=delete_messages)
+            with subheader:
+                    pass
+                    
+                
+                
+                
+        for message in messages_session_state():
+            with st.chat_message(message["role"]):
+                placeholder = st.container()
+                st_multi_modal(placeholder,message["content"],[])
+                
+                if "source_documents" in message:
+                    display_buttons_in_columns(3,message["source_documents"])                     
+        
+        user_question = st.chat_input("Ask a question about your documents:")
+        
+        if user_question:
+            handle_userinput(user_question)
+
+if __name__ == '__main__':
+    main()
+
+
+
+#"show in a histogram sbp as a function of age with 10 years bins"
