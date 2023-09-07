@@ -1,5 +1,6 @@
 import streamlit as st
 
+import pandas as pd
 from dotenv import load_dotenv
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
@@ -12,6 +13,8 @@ from utils.callback import CustomHandler
 from utils.helpers import *
 from models.agents import agents_classes
 from utils.multi_modal import st_multi_modal
+from utils.conversation_chain import get_conversation_chain
+from components.load_model import load_model,save_model
 load_dotenv()
 
 
@@ -42,42 +45,7 @@ def get_vectorstore(documents):
         return vectorstore
 
 
-def get_conversation_chain():
-    st.progress(100, text=f'Getting Agents')
-    datatype = st.session_state.data_type
-    embeddings = OpenAIEmbeddings()
-    try:
-        vectorstore = FAISS.load_local(f"dataset/{datatype}/vector", embeddings)
-    except:
-        vectorstore = False
-    try:
-        csvs = get_file_names(f"dataset/{st.session_state.data_type}/tables")
-    except:
-        csvs = False
-    try:
-        images = json.loads(open(f'dataset/{st.session_state.data_type}/images/metadata.json', 'r').read())
-    except:
-        images = False
-    conversation_chain = {}
-    for el in agents_classes:
-        arguments = agents_classes[el]['arguments']
-        parameters = {}
-        included = True
-        for arg in arguments:
-            value = eval(arg)
-            if not value:
-                included = False
-                break
-            parameters[arg] = eval(arg)
-        if included:
-            conversation_chain[el] = {
-                "executor":agents_classes[el]['func'](**parameters),
-                "messages":[]
-            }
-    if len(conversation_chain) == 0:
-        return False
-    st.session_state['conversation_chain'] = conversation_chain
-    return True
+
 def visualize(user_question):
 
     message_placeholder = st.container()
@@ -104,9 +72,12 @@ def handle_userinput(user_question):
 def process(files):
     documents = []
     remove_dir('dataset/process')
-    os.makedirs('dataset/process/tables')
-    os.makedirs('dataset/process/images')
-    os.makedirs('dataset/process/vector')
+    os.makedirs('dataset/process/input/tables')
+    os.makedirs('dataset/process/input/images')
+    os.makedirs('dataset/process/input/vector')
+    os.makedirs('dataset/process/output/tables')
+    os.makedirs('dataset/process/output/images')
+    os.makedirs('dataset/process/output/vector')
     #images_metadata = {}
 
     for i,file in enumerate(files):
@@ -148,7 +119,7 @@ def process(files):
     
 
     if(vectorstore):
-        vectorstore.save_local("dataset/process/vector")
+        vectorstore.save_local("dataset/process/input/vector")
    
 def show_source(source,documents):
     with st.sidebar:
@@ -180,10 +151,12 @@ def agent_changed():
 
 
 def main():
+    #name = st.experimental_get_query_params().get('name', [''])[0]
     st.set_page_config(page_title="Chat with Anything",
                        page_icon=":exploding_head:")
     
-
+    with open('style/custom.css') as f:
+        st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
    
     init_session_state()
     
@@ -197,14 +170,14 @@ def main():
         )    
     
     if not st.session_state.processed:
-        remove_dir('output')
-        remove_dir('dataset/process')
+        remove_dir('dataset/process/output')
+        #remove_dir('dataset/process')
         st.subheader("Your documents")
         pdf_docs = st.file_uploader(
             "Upload your Documents here and click on 'Process'", accept_multiple_files=True,type=["txt","pdf","png","mp3","docx","csv","jpg"])
         process_button = st.button("Process",use_container_width=True,type='primary')
         
-        trained_button = st.button("Trained Data",use_container_width=True)
+       
         
         if process_button:
             my_bar = st.progress(0, text="Operation in progress")
@@ -218,11 +191,14 @@ def main():
                 else:
                     st.session_state.data_type  = None
                     st.error('No Agents Avaialable')
-        if trained_button:
-            st.session_state.data_type  = "trained"
-            get_conversation_chain()   
-            st.session_state.processed = True
-            st.experimental_rerun()     
+        #st.session_state["model"] = {
+        #        "name":"",
+        #        "id":"NEW",
+        #        "index":0,
+        #        "df":[]
+        #    }
+        load_model()
+    
         with st.expander("## ChangeLog"):
             st.markdown(changelog_markdown)
     else:
@@ -244,6 +220,7 @@ def main():
                 eval(agents_classes[option]["annotated"])
                 if(st.session_state.agent != option):
                     change_agent_session_state(option)
+            save_model()
             with place:
                 col1,col2 = st.columns([11,1])
                 with col1:
@@ -270,7 +247,9 @@ def main():
         
         if user_question:
             handle_userinput(user_question)
-
+    #button = """<a href="/?name=John" target="_self" onclick="func"><button>Test Link</button></a>"""
+    #st.markdown(f"This is a button {button}", unsafe_allow_html=True)
+    
 if __name__ == '__main__':
     main()
 

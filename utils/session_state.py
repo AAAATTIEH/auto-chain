@@ -4,6 +4,8 @@ def init_session_state():
         st.session_state.data_type  = None
     if "files" not in st.session_state:
         st.session_state.files = []
+    if "model" not in st.session_state:
+        st.session_state.model = {}    
     if "conversation_chain" not in st.session_state:
         st.session_state.conversation_chain = {}
     if "chat_history" not in st.session_state:
@@ -18,6 +20,7 @@ def reset_session_state():
     st.session_state.files = []
     st.session_state.chat_history = None
     st.session_state.conversation_chain = {}
+    st.session_state.model = {}
     st.session_state.data_type = None
     st.session_state.agent = None
     st.session_state.processed  = False

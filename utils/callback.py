@@ -86,13 +86,14 @@ def prettify_output(input_string):
         output+=last_line
     return output    
 class CustomHandler(BaseCallbackHandler):
-
+    
     """Base callback handler that can be used to handle callbacks from langchain."""
     def __init__(self,message_placeholder):
         self.message_placeholder = message_placeholder
         self.content = ''
         self.test_token = ''
         self.containers = []
+        CustomHandler.index = st.session_state.model["index"]
     SPACES = '>'
     text_container = None
     stack = []
@@ -225,15 +226,15 @@ class CustomHandler(BaseCallbackHandler):
             self.content = self.content +':red[An Error Happened]'+'\n'
         elif 'AxesSubplot' in output:
             fig = plt.gcf()
-            path = f'output/images/image{CustomHandler.index}.png'
-            dir = 'output/images'
+            path = f'dataset/process/output/images/image{CustomHandler.index}.png'
+            dir = 'dataset/process/output/images'
             if(not os.path.exists(dir)):
                 os.makedirs(dir)
             CustomHandler.index = CustomHandler.index + 1
             fig.savefig(path)
             plt.clf() 
             self.content = self.content +'<{"type":"chart","source" : "'+path+'"}>'+'\n'
-        elif f'dataset/{st.session_state.data_type}/images' in output:
+        elif f'dataset/{st.session_state.data_type}/input/images' in output:
             self.content = self.content +'<{"type":"image","source" : "'+output.strip()+'"}>'+'\n'
         else:
             tables = get_table(output)
@@ -242,10 +243,10 @@ class CustomHandler(BaseCallbackHandler):
             else:
                 for table in tables:
                     df = pd.DataFrame(table)
-                    dir = 'output/tables'
+                    dir = 'dataset/process/output/tables'
                     if(not os.path.exists(dir)):
                         os.makedirs(dir)
-                    path = f'output/tables/table{CustomHandler.index}.csv'
+                    path = f'dataset/process/output/tables/table{CustomHandler.index}.csv'
                     df.to_csv(path,index=False)
                     CustomHandler.index = CustomHandler.index + 1
                     self.content = self.content +'<{"type":"table","source" : "'+path+'"}>'+'\n'

@@ -24,7 +24,7 @@ def path_to_blob(file_path):
         blob = file.read()
     return blob
 def parse_csv(file):
-    tmp_file = saveTemp(file,"dataset/process/tables")
+    tmp_file = saveTemp(file,"dataset/process/input/tables")
     tmp_file_path = tmp_file["file"]
 
     return tmp_file_path
