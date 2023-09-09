@@ -7,18 +7,18 @@ import json
 from utils.helpers import get_file_names
 def get_conversation_chain(conversation=None):
     st.progress(100, text=f'Getting Agents')
-    datatype = st.session_state.data_type
+ 
     embeddings = OpenAIEmbeddings()
     try:
-        vectorstore = FAISS.load_local(f"dataset/{datatype}/input/vector", embeddings)
+        vectorstore = FAISS.load_local(f"dataset/process/input/vector", embeddings)
     except:
         vectorstore = False
     try:
-        csvs = get_file_names(f"dataset/{st.session_state.data_type}/input/tables")
+        csvs = get_file_names(f"dataset/process/input/tables")
     except:
         csvs = False
     try:
-        images = json.loads(open(f'dataset/{st.session_state.data_type}/input/images/metadata.json', 'r').read())
+        images = json.loads(open(f'dataset/process/input/images/metadata.json', 'r').read())
     except:
         images = False
     conversation_chain = {}
@@ -34,15 +34,17 @@ def get_conversation_chain(conversation=None):
             parameters[arg] = eval(arg)
         if included:
             if(conversation):
-                if(conversation[el]):
+                if(el in conversation):
                     conversation_chain[el] = {
                         "executor":agents_classes[el]['func'](**parameters),
-                        "messages":conversation[el]["messages"]
+                        "messages":conversation[el]["messages"],
+                        "issues":conversation[el]["issues"]
                     }
             else:
                 conversation_chain[el] = {
                     "executor":agents_classes[el]['func'](**parameters),
-                    "messages":[]
+                    "messages":[],
+                    "issues":[]
                 }
     if len(conversation_chain) == 0:
         return False

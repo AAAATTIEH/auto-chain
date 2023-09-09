@@ -103,10 +103,11 @@ class CustomHandler(BaseCallbackHandler):
     def write_output(
             self,text
     ):
-        if not self.text_container:
-            self.text_container =st.expander("Thought Process",expanded=False)
-        with self.text_container:
-            st.markdown(self.SPACES+' '+text)
+        pass
+        #->ADD-IN-V0.0.4<-if not self.text_container:
+        #->ADD-IN-V0.0.4<-    self.text_container =st.expander("Thought Process",expanded=False)
+        #->ADD-IN-V0.0.4<-with self.text_container:
+        #->ADD-IN-V0.0.4<-    st.markdown(self.SPACES+' '+text)
          
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
@@ -148,16 +149,17 @@ class CustomHandler(BaseCallbackHandler):
     #    st.write(st.session_state.conversation)
         
     def on_llm_new_token(self, token: str, **kwargs: Any) -> Any:
-  
+        print(token)
         """Run on new LLM token. Only available when streaming is enabled."""
-       
-        #Check the last line
-        self.content+=token
-        output = prettify_output(self.content)
-        messages_session_state()[-1]["content"] = output
-        self.containers = st_multi_modal(container=self.message_placeholder,input_string=output+"▌",subcontainers=self.containers)
-            #self.message_placeholder.write(replaced+ )
-        
+        try:
+            #Check the last line
+            self.content+=token
+            output = prettify_output(self.content)
+            messages_session_state()[-1]["content"] = output
+            self.containers = st_multi_modal(container=self.message_placeholder,input_string=output+"▌",subcontainers=self.containers)
+                #self.message_placeholder.write(replaced+ )
+        except:
+            pass
      
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         """Run when LLM ends running."""
@@ -234,7 +236,7 @@ class CustomHandler(BaseCallbackHandler):
             fig.savefig(path)
             plt.clf() 
             self.content = self.content +'<{"type":"chart","source" : "'+path+'"}>'+'\n'
-        elif f'dataset/{st.session_state.data_type}/input/images' in output:
+        elif f'dataset/process/input/images' in output:
             self.content = self.content +'<{"type":"image","source" : "'+output.strip()+'"}>'+'\n'
         else:
             tables = get_table(output)
@@ -276,13 +278,14 @@ class CustomHandler(BaseCallbackHandler):
     def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> Any:
         """Run on agent end."""
         output = prettify_output(self.content)
-
+        
         messages_session_state()[-1]["content"] = output
         self.containers = st_multi_modal(container=self.message_placeholder,input_string=output,subcontainers=self.containers)
         self.containers = ""
         self.content = ''
         self.write_output(finish.log)
-        self.text_container.expanded = False
+        #->ADD-IN-V0.0.4<-REMOVEDself.text_container.expanded = False
+        
         #processor = DocumentProcessor(self.source_documents)   
         #grouped_documents = processor.group_and_sort()
         #messages_session_state()["source_documents"] = grouped_documents

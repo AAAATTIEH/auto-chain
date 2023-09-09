@@ -1,30 +1,53 @@
-# :blue[Version 0.0.2]
+# <span style="color:rgb(255, 75, 75)">Version 0.0.3</span>
+
+### General
+
+* Chat model management for testing purposes
+    * Assign distinctive names to each chat model.
+    * Chat models can be selected from the home page and are sorted by **last_updated** field
+    * Define various issues with detailed descriptions and status indicators for any agent in a chat model.
+    * Updates can be applied for model names, conversations and associated issues.
+* Indicate the presence of unsaved changes in the chat.
+* **New Chat** button to start a new blank chat with the same data
+* Express disapproval for messages exhibiting incorrect agent behavior using **👎** button.
+* Light red background color applied to disliked messages to make them stand out.
+* Added a new URL parameter, ***model_id***, to access any chat model directly
+* Ability to delete messages from any starting point
+* **Memory** is managed automatically when messages are deleted
+* Stop agent loop using **Stop Generating** button
+* Example chat models in changelog for new agents
+- :red[[-] Removed trained button in favor of chat models ]
+- :red[[-] Thought process for the last AI-Generated message has been removed temporarily]
+---
+# <span style="color:rgb(255, 75, 75)">Version 0.0.2</span>
 ### Agents
-- :green[**[+] CSV Agent** ]
+- :green[**[+] CSV Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
 
 ### File Parsing 
 - :green[**[+] CSV :** ] LOCAL
 
 ### General
-* Parse **Tables** from text
-* Parse **Charts** from text
+* **Thoughts** and **Observations** are now integrated into agent output
+* Parse **Tables** from **Observations** 
+* Parse **Charts** from **Observations**
+* Parse **Errors** from **Observations**
 * Auto agent selection based on input data
 * Agent annotation
-* **Thoughts** and **Observations** are now integrated into agent output
 * Save agent chat in the same session
 * Processing files progress bar
 * Preprocessed data via Trained Button
 * Reset agent chat
 ---
-
-# :blue[Version 0.0.1]
+# <span style="color:rgb(255, 75, 75)">Version 0.0.1</span>
 ### Tools
 - :green[**[+] Vector Store Retriever** ]
 ### Agents
-* :green[**[+] Conversational Retrival Agent** ]
+* :green[**[+] Conversational Retrival Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" style="color:rgb(49, 51, 63)" target="_self"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
 ### File Parsing
 - :green[**[+] PDF :** ] PyPDFLoader ➜ [VECTOR]
 - :green[**[+] PNG, JPG, JPEG :** ] Unstructured Image Loader ➜ [VECTOR]
 - :green[**[+] DOCX :** ] Docx2Txt ➜ [VECTOR]
 - :green[**[+] MP3 :** ] OpenAI Whisper API ➜ [VECTOR]
 - :green[**[+] TXT** ] ➜ [VECTOR]
+### General
+* Thought Process for the last AI-Generated Message
