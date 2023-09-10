@@ -23,6 +23,7 @@ def get_conversation_chain(conversation=None):
         images = None
     conversation_chain = {}
     for el in agents_classes:
+        chat_memory = []
         if conversation:
             if el in conversation:
                 chat_memory = eval(conversation[el]["memory"])

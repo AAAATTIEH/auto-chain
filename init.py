@@ -113,8 +113,8 @@ def handle_userinput(user_question):
     
     with st.chat_message("assistant"):
         
-        col1,col2,col3 = st.columns([1,1,1])
-        empty = col2.empty()
+        #-->READD V0.0.4-->col1,col2,col3 = st.columns([1,1,1])
+        #-->READD V0.0.4-->empty = col2.empty()
         container = st.container()
         #-->READD V0.0.4-->with col2:
         #-->READD V0.0.4-->    empty.button('Stop Generating',type="primary",key=f"c{len(messages_session_state())}",on_click=stop_generating)
