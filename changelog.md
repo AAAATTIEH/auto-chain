@@ -5,7 +5,7 @@
 * Chat model management for testing purposes
     * Assign distinctive names to each chat model.
     * Chat models can be selected from the home page and are sorted by **last_updated** field
-    * Define various issues with detailed descriptions and status indicators for any agent in a chat model.
+    * Define various issues with detailed descriptions for any agent in a chat model.
     * Updates can be applied for model names, conversations and associated issues.
 * Indicate the presence of unsaved changes in the chat.
 * **New Chat** button to start a new blank chat with the same data
@@ -14,7 +14,7 @@
 * Added a new URL parameter, ***model_id***, to access any chat model directly
 * Ability to delete messages from any starting point
 * **Memory** is managed automatically when messages are deleted
-* Stop agent loop using **Stop Generating** button
+* Saved chats preserve **Memory**, ensuring a smooth continuation of conversations.
 * Example chat models in changelog for new agents
 - :red[[-] Removed trained button in favor of chat models ]
 - :red[[-] Thought process for the last AI-Generated message has been removed temporarily]

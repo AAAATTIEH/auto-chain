@@ -48,6 +48,8 @@ def messages_session_state():
     return st.session_state.conversation_chain[st.session_state.agent]["messages"]
 def executor_session_state():
     return st.session_state.conversation_chain[st.session_state.agent]["executor"]
+def memory_session_state(agent):
+    return st.session_state.conversation_chain[agent]["executor"].memory
 def issues_session_state():
     return st.session_state.conversation_chain[st.session_state.agent]["issues"]
 def true_key_session_state(starts_with):

@@ -56,7 +56,6 @@ def delete_messages(index):
             
         messages[:] = messages[:memory_index]
 
-        print(executor_session_state().memory)
         #messages_session_state().pop()
         #messages = messages_session_state()
         #print(len(messages))
@@ -117,23 +116,23 @@ def handle_userinput(user_question):
         col1,col2,col3 = st.columns([1,1,1])
         empty = col2.empty()
         container = st.container()
-        with col2:
-            empty.button('Stop Generating',type="primary",key=f"c{len(messages_session_state())}",on_click=stop_generating)
+        #-->READD V0.0.4-->with col2:
+        #-->READD V0.0.4-->    empty.button('Stop Generating',type="primary",key=f"c{len(messages_session_state())}",on_click=stop_generating)
                 
         
         with container:
             try:
                 st.session_state['executing'] = True
                 execute(user_question = user_question)
-                #print(executor_session_state().memory.chat_memory.messages)
+              
                 st.session_state['executing'] = False
             except:
-                print(executor_session_state().memory.chat_memory.messages)
+             
                 st.session_state['executing'] = False
                 print('AN ERROR HAPPENED')
                 
-        with col2:
-            empty.empty()
+        #-->READD V0.0.4-->with col2:
+        #-->READD V0.0.4-->    empty.empty()
         
     if "source_documents" in messages_session_state()[-1]:
         display_buttons_in_columns(3,messages_session_state()[-1]["source_documents"])
@@ -339,7 +338,7 @@ def main():
                         annotation(f"""{option}""",background="transparent",fontSize="28px",fontWeight="bold"),
                     ) 
                 with col2:
-                    st.button('💡',type="primary",use_container_width=True,on_click=reset_messages)
+                    st.button('↺',type="primary",use_container_width=True,on_click=reset_messages)
                 
                 
                 

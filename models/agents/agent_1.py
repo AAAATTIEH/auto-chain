@@ -1,5 +1,5 @@
 name = "Agent 1: Conservational Agent"
-arguments = ["vectorstore"]
+arguments = ["vectorstore","chat_memory"]
 annotated = ["OpenAI Agent","Chat LLM","Retriever Tool","Memory"]
 
 from langchain.agents.agent_toolkits import create_retriever_tool
@@ -9,10 +9,10 @@ from langchain.schema.messages import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 from langchain.agents import AgentExecutor
 from models.llms.llms import *
-
-
-
-def agent(vectorstore):
+from langchain.schema import BaseChatMessageHistory
+from langchain.memory.chat_message_histories.in_memory import ChatMessageHistory
+from langchain.pydantic_v1 import Field
+def agent(vectorstore,chat_memory):
 
     tool = create_retriever_tool(
         vectorstore.as_retriever(), 
@@ -34,8 +34,9 @@ def agent(vectorstore):
             extra_prompt_messages=[MessagesPlaceholder(variable_name=memory_key)]
         )
     agent = OpenAIFunctionsAgent(llm=chat_llm, tools=tools, prompt=prompt)
-
-    memory = AgentTokenBufferMemory(memory_key=memory_key, llm=chat_llm)
+    
+    memory = AgentTokenBufferMemory(memory_key=memory_key, llm=chat_llm,chat_memory=ChatMessageHistory(messages=chat_memory))
+    
     agent_executor = AgentExecutor(agent=agent, tools=tools, memory=memory,
                                     return_intermediate_steps=True)
     

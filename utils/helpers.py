@@ -39,7 +39,7 @@ def get_file_names(directory_path):
     if len(file_paths) == 1:
         return file_paths[0]
     if len(file_paths) == 0:
-        return False
+        return None
     return file_paths
 
 def annotate(annotated,arguments):

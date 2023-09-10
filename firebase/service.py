@@ -4,6 +4,7 @@ import os
 import json
 import datetime
 from utils.callback import CustomHandler
+from utils.session_state import *
 if not firebase_admin._apps:
     cred = credentials.Certificate("firebase/_keys.json")
     app =firebase_admin.initialize_app(cred,{
@@ -100,6 +101,9 @@ def load(id):
         model = None
     return model,agents
 def save(id,name,chain,show):
+    #for key in chain:
+    #    print()
+
     if(id == "NEW"):
         model = db.collection('data').document()
         agents = db.collection('conversation').document(model.id)
@@ -109,9 +113,15 @@ def save(id,name,chain,show):
     conversation = {}
     total_issues = 0
     for i in chain:
+        memory = memory_session_state(i)
+        if(memory):
+            memory = str(memory.chat_memory.messages)
+        else:
+            memory = "None"
         conversation[i] = {
             "messages":chain[i]["messages"],
-            "issues":chain[i]["issues"]
+            "issues":chain[i]["issues"],
+            "memory":memory
         }
         total_issues+=len(chain[i]["issues"])
     if(id != "NEW"):

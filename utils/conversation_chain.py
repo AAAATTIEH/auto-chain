@@ -1,6 +1,6 @@
 import streamlit as st
 from langchain.embeddings import OpenAIEmbeddings
-
+from langchain.schema.messages import *
 from langchain.vectorstores import FAISS
 from models.agents import agents_classes
 import json
@@ -12,23 +12,28 @@ def get_conversation_chain(conversation=None):
     try:
         vectorstore = FAISS.load_local(f"dataset/process/input/vector", embeddings)
     except:
-        vectorstore = False
+        vectorstore = None
     try:
         csvs = get_file_names(f"dataset/process/input/tables")
     except:
-        csvs = False
+        csvs = None
     try:
         images = json.loads(open(f'dataset/process/input/images/metadata.json', 'r').read())
     except:
-        images = False
+        images = None
     conversation_chain = {}
     for el in agents_classes:
+        if conversation:
+            if el in conversation:
+                chat_memory = eval(conversation[el]["memory"])
+            
         arguments = agents_classes[el]['arguments']
         parameters = {}
         included = True
         for arg in arguments:
             value = eval(arg)
-            if not value:
+
+            if value is None:
                 included = False
                 break
             parameters[arg] = eval(arg)
