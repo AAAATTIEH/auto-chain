@@ -272,7 +272,7 @@ def main():
         with header:
             annotated_text(
                     annotation(f"Chat with Anything",background="transparent",fontSize="40px",fontWeight="bold"),
-                    annotation("pre-alpha", "v0.0.2",background="#afa",fontSize="18px"),
+                    annotation("pre-alpha", "v0.0.3",background="#1ff",fontSize="18px"),
             ) 
         remove_dir('dataset/process/output')
         #remove_dir('dataset/process')
