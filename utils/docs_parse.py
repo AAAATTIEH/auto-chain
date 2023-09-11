@@ -11,6 +11,7 @@ from langchain.document_loaders import WebBaseLoader
 from dotenv import load_dotenv
 from langchain.document_loaders.image import UnstructuredImageLoader
 from langchain.document_loaders import Docx2txtLoader
+from models.tools.image_caption import ImageCaptionTool
 load_dotenv()
 
 def parse_pdf(file):
@@ -49,13 +50,17 @@ def parse_txt(file):
     data = loader.load()
     return data
 def parse_image(file):
-    tmp_file = saveTemp(file)
+    tmp_file = saveTemp(file,"dataset/process/input/images")
     tmp_file_path = tmp_file["file"]
-    loader = UnstructuredImageLoader(file_path=tmp_file_path)
-    data = loader.load()
-    return data
-    #metadata = ImageCaptionTool().run(tmp_file_path)
-    #return tmp_file_path,metadata
+    metadata = ImageCaptionTool().run(tmp_file_path)
+    try:
+        loader = UnstructuredImageLoader(file_path=tmp_file_path)
+        data = loader.load()
+    except:
+        data = []
+    print(data)
+    return tmp_file_path,data,metadata
+     
 
 def parse_audio(file):
     tmp_file = saveTemp(file)
