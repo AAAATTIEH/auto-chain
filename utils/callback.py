@@ -103,12 +103,12 @@ class CustomHandler(BaseCallbackHandler):
     def write_output(
             self,text
     ):
-        pass
-        #->ADD-IN-V0.0.4<-if not self.text_container:
-        #->ADD-IN-V0.0.4<-    self.text_container =st.expander("Thought Process",expanded=False)
-        #->ADD-IN-V0.0.4<-with self.text_container:
-        #->ADD-IN-V0.0.4<-    st.markdown(self.SPACES+' '+text)
-         
+        if not self.text_container:
+            self.text_container =st.expander("Thought Process",expanded=False)
+            messages_session_state()[-1]["thought_process"] = ''
+        with self.text_container:
+                st.markdown(self.SPACES+' '+text)
+        messages_session_state()[-1]["thought_process"] += '\n\n'+self.SPACES+' '+text
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
     ) -> Any:
@@ -149,7 +149,7 @@ class CustomHandler(BaseCallbackHandler):
     #    st.write(st.session_state.conversation)
         
     def on_llm_new_token(self, token: str, **kwargs: Any) -> Any:
-        print(token)
+
         """Run on new LLM token. Only available when streaming is enabled."""
         try:
             #Check the last line
@@ -284,7 +284,7 @@ class CustomHandler(BaseCallbackHandler):
         self.containers = ""
         self.content = ''
         self.write_output(finish.log)
-        #->ADD-IN-V0.0.4<-REMOVEDself.text_container.expanded = False
+        self.text_container.expanded = False
         
         #processor = DocumentProcessor(self.source_documents)   
         #grouped_documents = processor.group_and_sort()

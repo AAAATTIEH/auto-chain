@@ -1,7 +1,22 @@
-# <span style="color:rgb(255, 75, 75)">Version 0.0.3</span>
+# <span style="color:rgb(255, 75, 75)">Version 0.0.4</span>
+### Agents
+- :green[**[+] Image Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
+
+### Tools
+* :green[**[+] Image Caption:**] generates descriptive text for images.
+* :green[**[+] Image Path Finder:**] locates the file path of locally stored images.
+* :green[**[+] Image Object Detection:**] identifies and recognizes objects within an image.
+* :green[**[+] Chooch Chat Tool:**] interfaces with the **Chooch API** to facilitate a chat or conversation involving the image
 
 ### General
-
+* Parse Images from **Observations**
+* Stop agent loop using **Stop Generating** button
+* Ability to delete chat models
+* Better chat model selection layout
+* **Thought Process** for every AI-Generated message with the ability to toggle them on/off
+---
+# <span style="color:rgb(255, 75, 75)">Version 0.0.3</span>
+### General
 * Chat model management for testing purposes
     * Assign distinctive names to each chat model.
     * Chat models can be selected from the home page and are sorted by **last_updated** field
@@ -39,15 +54,19 @@
 * Reset agent chat
 ---
 # <span style="color:rgb(255, 75, 75)">Version 0.0.1</span>
-### Tools
-- :green[**[+] Vector Store Retriever** ]
 ### Agents
 * :green[**[+] Conversational Retrival Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" style="color:rgb(49, 51, 63)" target="_self"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
+
+### Tools
+- :green[**[+] Vector Store Retriever** ]
+
 ### File Parsing
 - :green[**[+] PDF :** ] PyPDFLoader ➜ [VECTOR]
 - :green[**[+] PNG, JPG, JPEG :** ] Unstructured Image Loader ➜ [VECTOR]
 - :green[**[+] DOCX :** ] Docx2Txt ➜ [VECTOR]
 - :green[**[+] MP3 :** ] OpenAI Whisper API ➜ [VECTOR]
 - :green[**[+] TXT** ] ➜ [VECTOR]
+
 ### General
 * Thought Process for the last AI-Generated Message
+* Parse Final Answer from agent output

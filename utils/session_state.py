@@ -8,6 +8,8 @@ def load_session_state():
 def init_session_state():
     if "files" not in st.session_state:
         st.session_state.files = []
+    if "show_thought_process" not in st.session_state:
+        st.session_state.show_thought_process = False
     if "max_iterations" not in st.session_state:
         st.session_state.max_iterations = 0
     if "executing" not in st.session_state:

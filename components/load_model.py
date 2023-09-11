@@ -1,9 +1,10 @@
 import streamlit as st
-from firebase.service import load,save,load_all
+from firebase.service import load,save,load_all,delete
 import pandas as pd
 import json
 from utils.conversation_chain import get_conversation_chain
 from utils.session_state import *
+from custom_components import my_component
 def save_df():
     #st.session_state.df_changed = True
     df = issues_session_state()
@@ -15,7 +16,6 @@ def save_df():
    
     for key,row in dataframe["edited_rows"].items():
         if "issue" in row:
-            print(key)
             df[key]["issue"] = row["issue"]
     for row in dataframe["added_rows"]:
         if "issue" in row:
@@ -69,32 +69,37 @@ def save_model():
             st.checkbox('Show',key='show',value=True)
            
         if(compare_session_state()):
-            unsaved.markdown('<span style="color:rgb(255, 75, 75);font-weight:bolder">*Unsaved Changes</span>',unsafe_allow_html=True)
+            unsaved.error("**Unsaved Changes**")
+            #unsaved.markdown('<span style="color:rgb(255, 75, 75);font-weight:bolder">*Unsaved Changes</span>',unsafe_allow_html=True)
          
 def load_model():
-    with st.spinner("Loading Models"):
-        names = load_all()
-    col1, col2 = st.columns(2)
-    if len(names) != 0:
-        with col1:
-            option = st.selectbox(
-                        "Select your model",
-                        options= names,
-                        format_func=lambda x: str(x["name"]),
-                        placeholder="Select Your Model",
-                        label_visibility="collapsed"
+    with st.sidebar:
+        
+            
+        option = st.selectbox(
+                    "Sort by",
+                    options= [
+                        {"name":"Last Updated","value":"last_updated"},
+                        {"name":"Created","value":"created_at"},
+                        {"name":"Issues","value":"total_issues"}
+                        ],
+                    format_func=lambda x: str(x["name"]),
+                    placeholder="Sort by",
+                    
+                    
+        )
+        with st.spinner("Loading Models"):
+            names = load_all(option["value"])
+            if(len(names)!=0):
+                num_clicks = my_component(names,type=option["value"],key='hg')
+                if num_clicks:
+                    if(num_clicks['type'] == 'delete'):
+
+                        delete(num_clicks["id"])
+                        st.experimental_rerun()
                         
-            )
-        with col2:
-            st.markdown(f""" <a href="/?model_id={option['id']}" target="_self" style="color:rgb(49, 51, 63)"><button class="secondary-button">Load Model</button></a>""",unsafe_allow_html=True)
-            #if st.button('Load Model',use_container_width=True):
-            #    with st.spinner("Loading Model"):
-
-            #        model,agents = load(option["id"])
-            #        st.session_state.model = model
-
-            #        get_conversation_chain(agents["conversation"])
-            #        st.session_state.processed = True
-            #        load_session_state()
-            #        st.experimental_set_query_params(model_id='1')
-            #        st.experimental_rerun()
+                    else:
+                        st.experimental_set_query_params(model_id=num_clicks['id'])
+                        st.experimental_rerun()
+            else:
+                st.write(" No Chat Models Found")        

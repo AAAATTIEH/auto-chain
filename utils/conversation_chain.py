@@ -21,6 +21,7 @@ def get_conversation_chain(conversation=None):
         images = json.loads(open(f'dataset/process/input/images/metadata.json', 'r').read())
     except:
         images = None
+
     conversation_chain = {}
     for el in agents_classes:
         chat_memory = []
@@ -33,7 +34,7 @@ def get_conversation_chain(conversation=None):
         included = True
         for arg in arguments:
             value = eval(arg)
-
+           
             if value is None:
                 included = False
                 break
