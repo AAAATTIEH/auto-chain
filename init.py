@@ -20,6 +20,8 @@ load_dotenv()
 
 
 import json
+def toggle_thought_process():
+    st.session_state.show_thought_process = not st.session_state.show_thought_process
 def stop_generating():
     max_iterations = executor_session_state().max_iterations
     executor_session_state().max_iterations = 0
@@ -37,31 +39,23 @@ def reset_messages():
         print('No Memory for agent')
 
 def delete_messages(index):
-    print(f"Deleting Messages {index}")
     try:
         messages_session_state()[:] = messages_session_state()[:index]
-        
+
         memory = executor_session_state().memory
         messages = memory.chat_memory.messages
         #Find index in memory
-        memory_index = 0
+        memory_index = -2
         for i,message in enumerate(messages):
             class_name = message.__class__.__name__
             if(class_name == 'HumanMessage'):
-                if(index == 0):
+                if(index <= 0):
                     break
                 memory_index = i
-                index = index - 1
-                
-            
-        messages[:] = messages[:memory_index]
+                index = index - 2
 
-        #messages_session_state().pop()
-        #messages = messages_session_state()
-        #print(len(messages))
-        #messages = messages_session_state()[:index]
-        #print(len(messages))
-        #st.write(messages_session_state())
+        messages[:] = messages[:memory_index+2]
+
     except:
         print('No Memory for agent')
 def get_vectorstore(documents):
@@ -148,7 +142,7 @@ def process(files):
     os.makedirs('dataset/process/output/tables')
     os.makedirs('dataset/process/output/images')
     os.makedirs('dataset/process/output/vector')
-    #images_metadata = {}
+    images_metadata = []
 
     for i,file in enumerate(files):
         st.progress((i)/len(files), text=f'Processing {file.name}')
@@ -170,16 +164,18 @@ def process(files):
             docs = parse_docx(file)
             documents.extend(docs)
         elif file.name.endswith('.png') or file.name.endswith('.jpg') or file.name.endswith('.jpeg'):
-            docs = parse_image(file)
+            file_path,docs,metadata = parse_image(file)
             documents.extend(docs)
-            #file_path,metadata = parse_image(file)
-            #images_metadata[file_path] = metadata
+            images_metadata.append({
+                "image_path":file_path.replace('\\','/'),
+                "description":metadata
+            })
         elif file.name.endswith('.mp3'):
             docs = parse_audio(file)
             documents.extend(docs)
         st.session_state.files.append(file.name)
-    #with open('dataset/process/images/metadata.json', "w") as json_file:
-    #    json.dump(images_metadata, json_file, indent=4)
+    with open('dataset/process/input/images/metadata.json', "w") as json_file:
+        json.dump(images_metadata, json_file, indent=4)
     remove_dir('temp')
 
     # create vector store
@@ -228,6 +224,8 @@ def main():
         st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
    
     init_session_state()
+
+ 
     if(st.session_state.max_iterations!=0):
         executor_session_state().max_iterations = st.session_state.max_iterations
         st.session_state.max_iterations = 0
@@ -272,7 +270,7 @@ def main():
         with header:
             annotated_text(
                     annotation(f"Chat with Anything",background="transparent",fontSize="40px",fontWeight="bold"),
-                    annotation("pre-alpha", "v0.0.3",background="#1ff",fontSize="18px"),
+                    annotation("pre-alpha", "v0.0.4",background="#f8f",fontSize="18px"),
             ) 
         remove_dir('dataset/process/output')
         #remove_dir('dataset/process')
@@ -332,14 +330,20 @@ def main():
                     change_agent_session_state(option)
             
             with header:
-                col1,col2 = st.columns([11,1])
+                col1,col2,col3 = st.columns([10,1,1])
                 with col1:
                     annotated_text(
                         annotation(f"""{option}""",background="transparent",fontSize="28px",fontWeight="bold"),
                     ) 
                 with col2:
+                    if(st.session_state["show_thought_process"]):
+                        type = 'primary'
+                    else:
+                        type = 'secondary' 
+                    st.button('💡',type=type,use_container_width=True,on_click=toggle_thought_process)
+                with col3:
                     st.button('↺',type="primary",use_container_width=True,on_click=reset_messages)
-                
+                    
                 
                 
                 
@@ -355,8 +359,6 @@ def main():
                         st.button('🗑',type="primary",key=f"b{i}",on_click=delete_messages,args=(i,))
                     else:
                         dislike = st.empty()
-                        report = st.empty()
-                        
                         if(not message['disliked']):
                             if dislike.button('👎',key=f"d{i}"):
                                 dislike.button('👎',type='primary',key=f"d{i}-active")
@@ -367,7 +369,10 @@ def main():
                             if dislike.button('👎',key=f"d{i}-active",type='primary'):
                                 dislike.button('👎',key=f"d{i}")
                                 messages_session_state()[i]['disliked'] = False
-                            
+                if(st.session_state.show_thought_process):
+                    if(message['role']=='assistant'):
+                        with st.expander('Thought Process'):
+                            st.write(message['thought_process'])        
                            
                 
                 if "source_documents" in message:
@@ -397,7 +402,7 @@ def main():
         <script>
             
             let doc = window.parent.document
-            doc.querySelector("iframe").style.display = 'none'
+            doc.querySelector("[srcdoc]").style.display = 'none'
 
             const parentElement = doc.querySelector(".main");
 

@@ -69,21 +69,17 @@ def download(id,length):
 
         count += 1
 
-def load_all():
-
+def load_all(sortby):
     
     if os.environ['PARSE_ALL_ENVIRONMENTS'] == "True":
-        doc_ref = db.collection('data').where('show','==',True).order_by('last_updated', direction=firestore.Query.DESCENDING)
+        doc_ref = db.collection('data').where('show','==',True).order_by(sortby, direction=firestore.Query.DESCENDING)
     else:
-        doc_ref = db.collection('data').where('show','==',True).where('environment','==',os.environ['ENVIRONMENT']).order_by('last_updated', direction=firestore.Query.DESCENDING)
+        doc_ref = db.collection('data').where('show','==',True).where('environment','==',os.environ['ENVIRONMENT']).order_by(sortby, direction=firestore.Query.DESCENDING)
     documents = doc_ref.get()
     names = []
     for doc in documents:
         dict = doc.to_dict() 
-        names.append({
-            "id":doc.id,
-            "name":dict["name"]
-        })
+        names.append(dict)
     return names
 def load(id):
     model = None
@@ -100,6 +96,14 @@ def load(id):
     else:
         model = None
     return model,agents
+def delete(id):
+    model = db.collection('data').document(id)
+    agents = db.collection('conversation').document(id)
+    delete_folder(id)
+    model.delete()
+    agents.delete()
+    
+
 def save(id,name,chain,show):
     #for key in chain:
     #    print()
@@ -127,7 +131,7 @@ def save(id,name,chain,show):
     if(id != "NEW"):
         delete_folder(model.id)
     files = upload(model.id)
-    timestamp = datetime.datetime.now().timestamp()
+    timestamp = int(datetime.datetime.now().timestamp()*1000)
     if(id == "NEW"):
         model.set({
             'id':model.id,
