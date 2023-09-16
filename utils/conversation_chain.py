@@ -19,6 +19,8 @@ def get_conversation_chain(conversation=None):
         csvs = None
     try:
         images = json.loads(open(f'dataset/process/input/images/metadata.json', 'r').read())
+        if(len(images) == 0):
+            images = None
     except:
         images = None
 

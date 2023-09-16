@@ -4,19 +4,20 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from typing import  Dict, Optional
 from langchain.pydantic_v1 import  Field
-class ImagePathFinderTool(BaseTool):
-    name = "Image Path Finder"
-    description = "Use this tool only to find the exact path of an image if it's not in chat memory" \
-                  "The input to this tool must be a comma seperated string of keys to search about"\
-                  "It will return a simple string for the image path"
+class FilePathFinderTool(BaseTool):
+    name = "File Path Finder"
+    description = "Use this tool only to find the exact full file path if it's not in chat memory." \
+                  "The input to this tool must be a comma seperated string of keys to search about."\
+                  "It will return a simple string for the file path"
     paths = []
+    #paths: Optional[Dict] = Field(default_factory=dict)
     def _run(self, query:str):
-
+        self.return_direct = False
         prompt = PromptTemplate(
             template=
                     "Given the following paths"\
                     "{paths}"\
-                    "Write only the path that most likely about {query}"
+                    "Write only the full file path as it is in the paths that most likely about {query}"
                     "If there is no path return N/A",
             input_variables=["query","paths"]
         )
@@ -27,11 +28,9 @@ class ImagePathFinderTool(BaseTool):
         result = llm_chain.run(query = query,paths=self.paths)
         if 'N/A' in result:
             self.return_direct = True
-            return 'The image does not exist'
+            return 'The file does not exist'
         #if result.strip() not in self.paths:
         #    return f"{result} Image Not Found"
-        self.return_direct = False
-
         return result.replace("'","")
 
     def _arun(self, query: str):

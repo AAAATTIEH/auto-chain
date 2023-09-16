@@ -104,9 +104,7 @@ def delete(id):
     agents.delete()
     
 
-def save(id,name,chain,show):
-    #for key in chain:
-    #    print()
+def save(id,name,chain,options):
 
     if(id == "NEW"):
         model = db.collection('data').document()
@@ -116,7 +114,8 @@ def save(id,name,chain,show):
         agents = db.collection('conversation').document(model.id)
     conversation = {}
     total_issues = 0
-    for i in chain:
+    for i in options:
+        
         memory = memory_session_state(i)
         if(memory):
             memory = str(memory.chat_memory.messages)
@@ -137,7 +136,7 @@ def save(id,name,chain,show):
             'id':model.id,
             'name':name,
             'index':CustomHandler.index,
-            'show':show,
+            'show':True,
             'files':files,
             'total_issues':total_issues,
             'created_at':timestamp,

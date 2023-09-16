@@ -1,5 +1,5 @@
 
-from .helpers import saveTemp
+from utils.helpers import saveTemp
 from langchain.document_loaders.generic import GenericLoader
 from langchain.document_loaders import PyPDFLoader
 from langchain.document_loaders.blob_loaders.file_system import FileSystemBlobLoader
@@ -8,18 +8,17 @@ from langchain.document_loaders import TextLoader
 from langchain.document_loaders.parsers.audio import OpenAIWhisperParser
 import os
 from langchain.document_loaders import WebBaseLoader
-from dotenv import load_dotenv
 from langchain.document_loaders.image import UnstructuredImageLoader
 from langchain.document_loaders import Docx2txtLoader
 from models.tools.image_caption import ImageCaptionTool
-load_dotenv()
+
 
 def parse_pdf(file):
     tmp_file = saveTemp(file)
     tmp_file_path = tmp_file["file"]
     loader = PyPDFLoader(tmp_file_path)
     chunks = loader.load_and_split()
-    return chunks
+    return tmp_file_path,chunks
 def path_to_blob(file_path):
     with open(file_path, "rb") as file:
         blob = file.read()
@@ -34,7 +33,7 @@ def parse_pptx(file):
     tmp_file_path = tmp_file["file"]
     loader = UnstructuredPowerPointLoader(file_path=tmp_file_path)
     data = loader.load()
-    return data
+    return tmp_file_path,data
 def parse_docx(file):
     tmp_file = saveTemp(file)
     tmp_file_path = tmp_file["file"]
@@ -42,13 +41,13 @@ def parse_docx(file):
     data = loader.load_with_images(tmp_file["name"])
     
     
-    return data
+    return tmp_file_path,data
 def parse_txt(file):
     tmp_file = saveTemp(file)
     tmp_file_path = tmp_file["file"]
     loader = TextLoader(file_path=tmp_file_path)
     data = loader.load()
-    return data
+    return tmp_file_path,data
 def parse_image(file):
     tmp_file = saveTemp(file,"dataset/process/input/images")
     tmp_file_path = tmp_file["file"]
@@ -58,7 +57,6 @@ def parse_image(file):
         data = loader.load()
     except:
         data = []
-    print(data)
     return tmp_file_path,data,metadata
      
 

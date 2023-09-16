@@ -1,6 +1,6 @@
 import streamlit as st
 last_saved_session_state = None
-
+import os
 def load_session_state():
     global last_saved_session_state
     last_saved_session_state = str(st.session_state.conversation_chain)
@@ -9,7 +9,7 @@ def init_session_state():
     if "files" not in st.session_state:
         st.session_state.files = []
     if "show_thought_process" not in st.session_state:
-        st.session_state.show_thought_process = False
+        st.session_state.show_thought_process = bool(os.getenv("SHOW_THOUGHTS"))
     if "max_iterations" not in st.session_state:
         st.session_state.max_iterations = 0
     if "executing" not in st.session_state:

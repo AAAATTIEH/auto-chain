@@ -1,7 +1,12 @@
 # <span style="color:rgb(255, 75, 75)">Version 0.0.4</span>
-### Agents
-- :green[**[+] Image Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
+### Issues
+- Pressing on a chat multiple times is making the feature of opening a new chat disabled
+- Cussor and hover color on chat models
+- fix urls
+- Agent IDs (AN IDEA)
 
+### Agents
+- :green[**[+] Image Chat Agent** ] <a href="/?model_id=7eTRxzehOW4IBxKppjyb" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
 ### Tools
 * :green[**[+] Image Caption:**] generates descriptive text for images.
 * :green[**[+] Image Path Finder:**] locates the file path of locally stored images.
@@ -14,6 +19,8 @@
 * Ability to delete chat models
 * Better chat model selection layout
 * **Thought Process** for every AI-Generated message with the ability to toggle them on/off
+* Choose agents on unsaved chats
+* :red[[-] Removed show/hide chat model checkbox on unsaved chats]
 ---
 # <span style="color:rgb(255, 75, 75)">Version 0.0.3</span>
 ### General

@@ -14,3 +14,4 @@ docx2txt==0.8
 transformers==4.31.0
 torch==2.0.1
 firebase-admin==6.0.1
+streamlit-tags==1.2.8

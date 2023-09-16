@@ -1,4 +1,4 @@
-name = "Agent 2: CSV Agent"
+name = "📊 CSV Agent"
 arguments = ["csvs"]
 annotated = ["ZeroShot Agent","Default LLM","REPL Tool"]
 

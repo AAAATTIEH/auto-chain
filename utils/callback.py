@@ -103,6 +103,7 @@ class CustomHandler(BaseCallbackHandler):
     def write_output(
             self,text
     ):
+        
         if not self.text_container:
             self.text_container =st.expander("Thought Process",expanded=False)
             messages_session_state()[-1]["thought_process"] = ''

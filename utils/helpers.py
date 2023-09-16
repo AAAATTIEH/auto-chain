@@ -55,3 +55,12 @@ def remove_dir(path):
         shutil.rmtree(path)
     except Exception as e:
         pass
+
+def reset_dataset_directory():
+    remove_dir('dataset/process')
+    os.makedirs('dataset/process/input/tables')
+    os.makedirs('dataset/process/input/images')
+    os.makedirs('dataset/process/input/vector')
+    os.makedirs('dataset/process/output/tables')
+    os.makedirs('dataset/process/output/images')
+    os.makedirs('dataset/process/output/vector')
