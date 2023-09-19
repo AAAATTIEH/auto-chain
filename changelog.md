@@ -9,7 +9,7 @@
 * :green[**[+] Chooch Chat Tool:**] interfaces with the **Chooch API** to facilitate a chat or conversation involving the image
 
 ### General
-* Parse Images from **Observations**
+* Parse Images from **Agent Observations**
 * Stop agent loop using **Stop Generating** button
 * Better chat model selection layout
 * Ability to delete chat models
@@ -45,10 +45,10 @@
 - :green[**[+] CSV :** ] LOCAL
 
 ### General
-* **Thoughts** and **Observations** are now integrated into agent output
-* Parse **Tables** from **Observations** 
-* Parse **Charts** from **Observations**
-* Parse **Errors** from **Observations**
+* **Agent Thoughts** and **Agent Observations** are now integrated into agent output
+* Parse **Tables** from **Agent Observations** 
+* Parse **Charts** from **Agent Observations**
+* Parse **Errors** from **Agent Observations**
 * Auto agent selection based on input data
 * Agent annotation
 * Save agent chat in the same session

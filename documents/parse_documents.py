@@ -45,8 +45,10 @@ def parse_docx(file):
 def parse_txt(file):
     tmp_file = saveTemp(file)
     tmp_file_path = tmp_file["file"]
-    loader = TextLoader(file_path=tmp_file_path)
+    loader = TextLoader(file_path=tmp_file_path,autodetect_encoding=True)
+   
     data = loader.load()
+    
     return tmp_file_path,data
 def parse_image(file):
     tmp_file = saveTemp(file,"dataset/process/input/images")

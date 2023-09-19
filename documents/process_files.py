@@ -28,6 +28,7 @@ def process_files(files):
             vectorstore_metadata.append({"file_path":file_path.replace('\\','/')})
         elif file.name.endswith('.txt'):
             file_path,docs = parse_txt(file)
+            
             documents.extend(docs)
             vectorstore_metadata.append({"file_path":file_path.replace('\\','/')})
         elif file.name.endswith('.docx'):

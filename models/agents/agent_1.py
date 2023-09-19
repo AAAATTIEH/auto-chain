@@ -1,6 +1,6 @@
 name = "💬 Conversational Agent"
 arguments = ["vectorstore","chat_memory"]
-annotated = ["OpenAI Agent","Chat LLM","Retriever Tool","Memory"]
+annotated = ["OpenAI Agent","Chat LLM","Retriever Tool"]
 
 from langchain.agents.agent_toolkits import create_retriever_tool
 from langchain.agents.openai_functions_agent.agent_token_buffer_memory import AgentTokenBufferMemory
@@ -9,9 +9,8 @@ from langchain.schema.messages import SystemMessage
 from langchain.prompts import MessagesPlaceholder
 from langchain.agents import AgentExecutor
 from models.llms.llms import *
-from langchain.schema import BaseChatMessageHistory
 from langchain.memory.chat_message_histories.in_memory import ChatMessageHistory
-from langchain.pydantic_v1 import Field
+
 def agent(vectorstore,chat_memory):
 
     tool = create_retriever_tool(

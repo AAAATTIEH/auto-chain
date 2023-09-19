@@ -138,7 +138,7 @@ class CustomHandler(BaseCallbackHandler):
         self.SPACES+='>'
     def on_retry(self,*args,**kwargs):
         """Run on retry""" 
-        
+
     def on_llm_new_token(self, token: str, **kwargs: Any) -> Any:
 
         """Run on new LLM token. Only available when streaming is enabled."""
@@ -215,8 +215,10 @@ class CustomHandler(BaseCallbackHandler):
         self.stack.pop()
         self.write_output(outputy)
         self.write_output(output)
-    
-        if 'Error' in output:
+
+        if kwargs['name'] == 'search':
+            pass
+        elif 'Error' in output and kwargs['name']=='python_repl_ast':
             self.content = self.content +':red[An Error Happened]'+'\n'
         elif 'AxesSubplot' in output:
             fig = plt.gcf()
