@@ -93,12 +93,10 @@ class CustomHandler(BaseCallbackHandler):
         self.content = ''
         self.test_token = ''
         self.containers = []
-        CustomHandler.index = st.session_state.model["index"]
     SPACES = '>'
     text_container = None
     stack = []
     source_documents  = []
-    index = 0
     add = True
     def write_output(
             self,text
@@ -106,7 +104,12 @@ class CustomHandler(BaseCallbackHandler):
         
         if not self.text_container:
             self.text_container =st.expander("Thought Process",expanded=False)
-            messages_session_state()[-1]["thought_process"] = ''
+            if(executor_session_state().memory is not None):
+                messages_session_state()[-1]["thought_process"] = "**Memory**\n\n"
+
+                messages_session_state()[-1]["thought_process"] += "\n\n".join([f"{type(item).__name__}: {item}" for item in executor_session_state().memory.chat_memory.messages])
+            else:
+                messages_session_state()[-1]["thought_process"] = ''
         with self.text_container:
                 st.markdown(self.SPACES+' '+text)
         messages_session_state()[-1]["thought_process"] += '\n\n'+self.SPACES+' '+text
@@ -133,21 +136,8 @@ class CustomHandler(BaseCallbackHandler):
         #markdown_text = f"```json\n{json_str}\n```"
         #self.write_output(markdown_text) 
         self.SPACES+='>'
-    #def on_retry(self, *args, **kwargs):
-    #    print('Retrying')
-    #    index = int(os.environ["API_KEY_INDEX"])
-    #    index = index+1
-    #    if(index == 5):
-    #        index = 1
-    #    os.environ["API_KEY_INDEX"] = str(index)
-        
-    #    os.environ["OPENAI_API_KEY"] = os.environ[f"OPENAI_API_KEY_{index}"]
-        #llm.openai_api_key = os.environ["OPENAI_API_KEY"]
-        #chat_llm.openai_api_key = os.environ["OPENAI_API_KEY"] 
-    #    st.session_state.conversation.agent.llm_chain.llm.openai_api_key = os.environ["OPENAI_API_KEY"]
-    #    print(index)
-    #    print(chat_llm.openai_api_key) 
-    #    st.write(st.session_state.conversation)
+    def on_retry(self,*args,**kwargs):
+        """Run on retry""" 
         
     def on_llm_new_token(self, token: str, **kwargs: Any) -> Any:
 
@@ -174,6 +164,7 @@ class CustomHandler(BaseCallbackHandler):
     def on_llm_error(
         self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
     ) -> Any:
+        
         """Run when LLM errors."""
 
 
@@ -229,11 +220,11 @@ class CustomHandler(BaseCallbackHandler):
             self.content = self.content +':red[An Error Happened]'+'\n'
         elif 'AxesSubplot' in output:
             fig = plt.gcf()
-            path = f'dataset/process/output/images/image{CustomHandler.index}.png'
+            path = f'dataset/process/output/images/image{st.session_state.model["index"]}.png'
             dir = 'dataset/process/output/images'
             if(not os.path.exists(dir)):
                 os.makedirs(dir)
-            CustomHandler.index = CustomHandler.index + 1
+            st.session_state.model["index"]+=1
             fig.savefig(path)
             plt.clf() 
             self.content = self.content +'<{"type":"chart","source" : "'+path+'"}>'+'\n'
@@ -249,9 +240,9 @@ class CustomHandler(BaseCallbackHandler):
                     dir = 'dataset/process/output/tables'
                     if(not os.path.exists(dir)):
                         os.makedirs(dir)
-                    path = f'dataset/process/output/tables/table{CustomHandler.index}.csv'
+                    path = f'dataset/process/output/tables/table{st.session_state.model["index"]}.csv'
                     df.to_csv(path,index=False)
-                    CustomHandler.index = CustomHandler.index + 1
+                    st.session_state.model["index"]+= 1
                     self.content = self.content +'<{"type":"table","source" : "'+path+'"}>'+'\n'
         
         

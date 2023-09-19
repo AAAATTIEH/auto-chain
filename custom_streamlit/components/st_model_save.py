@@ -63,7 +63,6 @@ def st_model_save():
                     return
                 my_bar = st.progress(0, text=f'Operation in Progress')
                 with my_bar:
-                    
                     id = save(st.session_state.model["id"],name,st.session_state.conversation_chain,options)
                     load_session_state()
                     st.success(f'Chat Model Saved ID {id}')

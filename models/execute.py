@@ -4,9 +4,11 @@ from utils.callback import CustomHandler
 def execute(user_question):
 
     message_placeholder = st.container()
-
-    executor_session_state()({
-            "input":user_question
-    },callbacks = [CustomHandler(message_placeholder = message_placeholder)])
-    
-    return 
+    try:
+        executor_session_state()({
+                "input":user_question
+        },callbacks = [CustomHandler(message_placeholder = message_placeholder)])
+        return True
+    except:
+        
+        return False 

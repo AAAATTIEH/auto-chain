@@ -19,7 +19,9 @@
 
         }
         });
-
+        
+       
+        
         let messages = doc.querySelectorAll(".stChatMessage")
         for (var i=0;i<messages.length;i++){
                 message = messages[i]

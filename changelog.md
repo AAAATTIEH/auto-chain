@@ -1,12 +1,7 @@
-# <span style="color:rgb(255, 75, 75)">Version 0.0.4</span>
-### Issues
-- Pressing on a chat multiple times is making the feature of opening a new chat disabled
-- Cussor and hover color on chat models
-- fix urls
-- Agent IDs (AN IDEA)
-
+# <span style="color:rgb(255, 75, 75)">v0.0.4</span>
 ### Agents
-- :green[**[+] Image Chat Agent** ] <a href="/?model_id=7eTRxzehOW4IBxKppjyb" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
+- :green[**[+] Image Chat Agent** ] 
+
 ### Tools
 * :green[**[+] Image Caption:**] generates descriptive text for images.
 * :green[**[+] Image Path Finder:**] locates the file path of locally stored images.
@@ -16,13 +11,14 @@
 ### General
 * Parse Images from **Observations**
 * Stop agent loop using **Stop Generating** button
-* Ability to delete chat models
 * Better chat model selection layout
+* Ability to delete chat models
 * **Thought Process** for every AI-Generated message with the ability to toggle them on/off
+* Memory for each AI response in **Thought Process**
 * Choose agents on unsaved chats
 * :red[[-] Removed show/hide chat model checkbox on unsaved chats]
 ---
-# <span style="color:rgb(255, 75, 75)">Version 0.0.3</span>
+# <span style="color:rgb(255, 75, 75)">v0.0.3</span>
 ### General
 * Chat model management for testing purposes
     * Assign distinctive names to each chat model.
@@ -41,9 +37,9 @@
 - :red[[-] Removed trained button in favor of chat models ]
 - :red[[-] Thought process for the last AI-Generated message has been removed temporarily]
 ---
-# <span style="color:rgb(255, 75, 75)">Version 0.0.2</span>
+# <span style="color:rgb(255, 75, 75)">v0.0.2</span>
 ### Agents
-- :green[**[+] CSV Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
+- :green[**[+] CSV Agent** ]
 
 ### File Parsing 
 - :green[**[+] CSV :** ] LOCAL
@@ -60,9 +56,9 @@
 * Preprocessed data via Trained Button
 * Reset agent chat
 ---
-# <span style="color:rgb(255, 75, 75)">Version 0.0.1</span>
+# <span style="color:rgb(255, 75, 75)">v0.0.1</span>
 ### Agents
-* :green[**[+] Conversational Retrival Agent** ] <a href="/?model_id=EgEt7w9T65NzQEw7hSVM" style="color:rgb(49, 51, 63)" target="_self"><button class="css-7ym5gk ef3psqc11">⚙️Try Now</button></a>
+* :green[**[+] Conversational Retrival Agent** ]
 
 ### Tools
 - :green[**[+] Vector Store Retriever** ]

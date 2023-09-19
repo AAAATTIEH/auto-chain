@@ -7,7 +7,7 @@ from utils.multi_modal import st_multi_modal
 def st_chat():
     for i,message in enumerate(messages_session_state()):
         with st.chat_message(message["role"]):
-            
+
             col1,col2 = st.columns([11,1])
             with col1:
                 placeholder = st.container()
@@ -30,8 +30,6 @@ def st_chat():
             if(st.session_state.show_thought_process):
                 if(message['role']=='assistant'):
                     with st.expander('Thought Process'):
-                        if(executor_session_state().memory is not None):
-                            st.write(executor_session_state().memory.chat_memory.messages)
                         st.write(message['thought_process'])        
                         
             

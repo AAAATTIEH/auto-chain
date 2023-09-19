@@ -1,18 +1,30 @@
 import firebase_admin
 from firebase_admin import credentials,firestore,storage
 import os
-import json
 import datetime
-from utils.callback import CustomHandler
 from utils.session_state import *
+import streamlit as st
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase/_keys.json")
+    
+    cred = credentials.Certificate({
+            "type": "service_account",
+            "project_id": os.environ["project_id"],
+            "private_key_id": os.environ["private_key_id"],
+            "private_key":  os.environ["private_key"],
+            "client_email": os.environ["client_email"],
+            "client_id": os.environ["client_id"],
+            "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+            "client_x509_cert_url": os.environ["client_x509_cert_url"],
+            "universe_domain": "googleapis.com"
+    })
     app =firebase_admin.initialize_app(cred,{
-        'storageBucket':'auto-chain-c13a0.appspot.com'
+        'storageBucket':os.environ["storageBucket"]
     })
 db = firestore.client()
 bucket = storage.bucket()
-import streamlit as st
+
 
 def upload(id):
     folder_path = "dataset/process"
@@ -135,7 +147,7 @@ def save(id,name,chain,options):
         model.set({
             'id':model.id,
             'name':name,
-            'index':CustomHandler.index,
+            'index':st.session_state["model"]["index"],
             'show':True,
             'files':files,
             'total_issues':total_issues,
@@ -146,7 +158,7 @@ def save(id,name,chain,options):
     else: 
         model.update({
             'name':name,
-            'index':CustomHandler.index,
+            'index':st.session_state["model"]["index"],
             'files':files,
             'total_issues':total_issues,
             'last_updated':timestamp

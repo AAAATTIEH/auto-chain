@@ -7,3 +7,4 @@ from .st_chat import st_chat
 from .st_sidebar import st_sidebar
 from .st_chat_input import st_chat_input
 from .st_changelog import st_changelog
+from .st_examples import st_examples

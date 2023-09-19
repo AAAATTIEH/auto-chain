@@ -20,37 +20,9 @@ from models.memory.custom_image_memory import CustomImageMemory
 from langchain.agents import AgentType
 from langchain.memory import ConversationBufferMemory, ReadOnlySharedMemory
 from langchain import OpenAI, LLMChain, PromptTemplate
-import langchain 
-langchain.debug = True
+
 from models.llms.llms import *
-"""def agent(images):
 
-    tools = [ImagePathFinderTool(paths = images),ChoochChatTool()]
-
-    conversational_memory = ConversationBufferWindowMemory(
-        memory_key='chat_history',
-        k=5,
-        return_messages=True
-    )
-    
-
-
-    token_memory = AgentTokenBufferMemory(
-            memory_key='chat_history', llm=llm,return_messages=True
-    )
-    agent = initialize_agent(
-        #agent="zero-shot-react-description",
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-        tools=tools,
-        llm=llm,
-        max_iterations=5,
-        memory=token_memory,
-        early_stopping_method='generate',
-        return_intermediate_steps = True
-    )
-
-    return agent
-"""
 def agent(images):
     tools = [ImagePathFinderTool(paths = images),ChoochChatTool()]
     prefix = """Have a conversation with a human, 

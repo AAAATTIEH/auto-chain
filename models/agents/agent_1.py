@@ -1,4 +1,4 @@
-name = "💬 Conservational Agent"
+name = "💬 Conversational Agent"
 arguments = ["vectorstore","chat_memory"]
 annotated = ["OpenAI Agent","Chat LLM","Retriever Tool","Memory"]
 

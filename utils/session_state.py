@@ -6,6 +6,10 @@ def load_session_state():
     last_saved_session_state = str(st.session_state.conversation_chain)
     
 def init_session_state():
+    if "chat_input" not in st.session_state:
+        st.session_state.chat_input = None
+    if "execute" not in st.session_state:
+        st.session_state.execute = {"current_id":0,"ids":{}}
     if "files" not in st.session_state:
         st.session_state.files = []
     if "show_thought_process" not in st.session_state:

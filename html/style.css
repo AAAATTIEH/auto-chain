@@ -70,4 +70,19 @@
     border-color: rgb(255, 75, 75);
     background-color: rgb(255, 75, 75);
 }
-.css-1544g2n{padding:4rem 0.35rem 0rem}
+.css-4z1n4l.en6cib65 > img{
+    display: none;
+}
+.element-container:has(#button-after) + div button{
+    position:fixed;
+    bottom:0;
+    z-index: 299;
+    margin-bottom: 120px;
+    transform: translateX(-50%);
+    left: 50%; 
+  
+    margin-left: auto;
+    margin-right: auto;
+}
+
+

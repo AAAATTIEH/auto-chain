@@ -10,31 +10,35 @@ from custom_streamlit.functions import *
 
 
 
-
 def main():
-    
+  
     model_id = st.experimental_get_query_params().get('model_id', [''])[0]
-
-    st.set_page_config(page_title="Chat with Anything",
+    
+    st.set_page_config(page_title="Auto Chain",
                        page_icon=":exploding_head:")
     
     with open('html/style.css') as f:
         st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
    
     init_session_state()
+    
 
     if(st.session_state.max_iterations!=0):
+
+        
         executor_session_state().max_iterations = st.session_state.max_iterations
         st.session_state.max_iterations = 0
-    if(st.session_state.executing == 'Forced'):
-        st.session_state.executing = False
+        
 
+    
     func_handle_url(model_id)
     
-    header = st.empty()
-    subheader = st.empty()
+    header,subheader = st.empty(),st.empty()
+
     if not st.session_state.processed:
+
         remove_dir('dataset/process/output')
+        remove_dir('dataset/process/input')
         ##Custom Streamlit Header
         st_header_home(header,subheader)
         
@@ -43,9 +47,14 @@ def main():
 
         ## Custom Streamlit Sidebar Chat Models
         st_models_load()
-    
+        
+        ## Custom Streamlit Changelog
+        st_examples()
         st_changelog()
+
     else:
+        
+        
         # Custom Streamlit Sidebar Component        
         option = st_sidebar()
 
@@ -60,12 +69,14 @@ def main():
 
         # Custom Streamlit Chat Input
         st_chat_input()
-        
+    
+    
     with open('html/script.txt',"r") as f:
        js_content = f.read()
-
+    
     html(f"""{js_content}""")
     
+
 if __name__ == '__main__':
     main()
 
