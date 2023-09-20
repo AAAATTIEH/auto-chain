@@ -32,7 +32,7 @@ def st_models_load():
                         
                     else:
                         st.experimental_set_query_params(model_id=num_clicks['id'])
-
+                        st.session_state.url  = {"path":num_clicks['id'],"clicked":True}
                         st.experimental_rerun()
             else:
                 st.write(" No Chat Models Found")        
