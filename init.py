@@ -21,7 +21,8 @@ def main():
         st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
    
     init_session_state()
-    
+    print(model_id)
+    print(st.session_state.processed)
 
     if(st.session_state.max_iterations!=0):
 
