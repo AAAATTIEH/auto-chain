@@ -5,13 +5,13 @@ from PIL import Image
 import streamlit as st
 @st.cache_resource
 def load_model():
-    model_name = "Salesforce/blip-image-captioning-large"
+    model_name = "Salesforce/blip-image-captioning-base"
     device = "cpu"  # cuda
     return BlipForConditionalGeneration.from_pretrained(model_name).to(device)
 
 @st.cache_resource
 def load_processor():
-    model_name = "Salesforce/blip-image-captioning-large"
+    model_name = "Salesforce/blip-image-captioning-base"
     device = "cpu"  # cuda
     return BlipProcessor.from_pretrained(model_name)
 class ImageCaptionTool(BaseTool):
