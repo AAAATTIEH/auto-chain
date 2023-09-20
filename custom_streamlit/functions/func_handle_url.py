@@ -1,14 +1,18 @@
 import streamlit as st
-from utils.session_state import load_session_state
+from utils.session_state import load_session_state,reset_session_state
 from utils.conversation_chain import get_conversation_chain
 from firebase.service import load
 from utils.helpers import remove_dir
 def func_handle_url(model_id):
-    if(st.session_state.url["clicked"]):
+    if(st.session_state.url["clicked"] and st.session_state.url["path"]!=""):
         st.session_state.url["clicked"] = False
         model_id = st.session_state.url["path"]
-
-    if(model_id and model_id!='chat' and not st.session_state.processed):
+    if(st.session_state.url["clicked"] and st.session_state.url["path"]==""):
+        st.session_state.url["clicked"] = False
+        st.session_state.processed = False
+        st.experimental_set_query_params()
+        #reset_session_state()
+    elif(model_id and model_id!='chat' and not st.session_state.processed):
         
         my_bar = st.empty()
         my_bar.progress(0, text="Operation in progress")
@@ -25,7 +29,7 @@ def func_handle_url(model_id):
                 st.experimental_set_query_params(model_id=model_id)
                 #st.experimental_rerun()
         my_bar.empty()
-    if(model_id == 'chat' and not st.session_state.processed):
+    elif(model_id == 'chat' and not st.session_state.processed):
         remove_dir("dataset/process/output")
         my_bar = st.empty()
 

@@ -3,11 +3,13 @@ from custom_streamlit.functions import func_agent_changed
 from utils.session_state import change_agent_session_state
 from models.agents import agents_classes
 from annotated_text import annotated_text,annotation
+def retry_clicked():
+    st.session_state.url = {"path":"","clicked":True}
 def st_sidebar():
     with st.sidebar:
         col1,col2 = st.columns(2)
         with col1:
-            st.markdown(""" <a href="/" target="_self" style="color:rgb(49, 51, 63)"><button class="secondary-button">Retry</button></a>""",unsafe_allow_html=True)
+            st.button("Retry",on_click=retry_clicked,use_container_width=True)
             
         with col2:
             st.markdown(' <a href="/?model_id=chat" target="_self" style="color:rgb(49, 51, 63)"><button class="primary-button">New Chat</button></a>',unsafe_allow_html=True)
