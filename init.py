@@ -21,12 +21,9 @@ def main():
         st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
    
     init_session_state()
-    print(model_id)
-    print(st.session_state.processed)
+
 
     if(st.session_state.max_iterations!=0):
-
-        
         executor_session_state().max_iterations = st.session_state.max_iterations
         st.session_state.max_iterations = 0
         
@@ -35,7 +32,7 @@ def main():
     func_handle_url(model_id)
     
     header,subheader = st.empty(),st.empty()
-
+    
     if not st.session_state.processed:
 
         remove_dir('dataset/process/output')

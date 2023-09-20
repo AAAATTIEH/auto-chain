@@ -6,6 +6,8 @@ def load_session_state():
     last_saved_session_state = str(st.session_state.conversation_chain)
     
 def init_session_state():
+    if "url" not in st.session_state:
+        st.session_state.url = {"clicked":False,"path":""}
     if "chat_input" not in st.session_state:
         st.session_state.chat_input = None
     if "execute" not in st.session_state:

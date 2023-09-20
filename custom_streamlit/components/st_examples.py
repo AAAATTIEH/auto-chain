@@ -1,12 +1,34 @@
 import streamlit as st
+def on_button_click(model_id):
+    st.session_state.url = {"path":model_id,"clicked":True}
+def create_button(example):
+    return st.button(example["name"],on_click=on_button_click,args=(example["id"],),use_container_width=True)
 
 def st_examples():
-    st.markdown("""
-        ### Examples
-<a href="/?model_id=7eTRxzehOW4IBxKppjyb" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">Image Chat Agent<sub style="color:rgb(255, 75, 75)">&nbsp;**v0.0.4**<sub></button></a>
-<a href="/?model_id=cB6bpnpIQdiyBRXKtXVe" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">CSV Agent <sub style="color:rgb(255, 75, 75)">&nbsp;**v0.0.2**<sub></button></a>
-<a href="/?model_id=Gfwvc6yuSkIv9JnBpNtf" target="_self" style="color:rgb(49, 51, 63)"><button class="css-7ym5gk ef3psqc11">Conversational Agent<sub style="color:rgb(255, 75, 75)">&nbsp;**v0.0.1**<sub></button></a>
-
-
-
-    """,unsafe_allow_html=True)
+    st.markdown("### Examples")
+    col1,col2,col3 = st.columns([1,1,1])
+    examples = [
+        {
+            "name":"Image Chat Agent",
+            "id":"7eTRxzehOW4IBxKppjyb"
+        },
+        {
+            "name":"CSV Agent",
+            "id":"cB6bpnpIQdiyBRXKtXVe"
+        },
+        {
+            "name":"Conversational Agent",
+            "id":"Gfwvc6yuSkIv9JnBpNtf"
+        }
+    ]
+    for i,example in enumerate(examples):
+        if(i%3 == 0):
+            with col1:
+                create_button(example)
+        elif((i-1)%3 == 0):
+            with col2:
+                create_button(example)
+        elif((i-2)%3==0):
+            with col3:
+                create_button(example)
+        

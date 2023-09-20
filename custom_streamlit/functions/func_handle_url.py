@@ -4,8 +4,11 @@ from utils.conversation_chain import get_conversation_chain
 from firebase.service import load
 from utils.helpers import remove_dir
 def func_handle_url(model_id):
+    if(st.session_state.url["clicked"]):
+        st.session_state.url["clicked"] = False
+        model_id = st.session_state.url["path"]
 
-    if(model_id and model_id!='chat' and not st.session_state.processed ):
+    if(model_id and model_id!='chat' and not st.session_state.processed):
         
         my_bar = st.empty()
         my_bar.progress(0, text="Operation in progress")

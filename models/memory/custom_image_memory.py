@@ -45,7 +45,6 @@ class CustomImageMemory(BaseChatMemory):
                 ai_prefix=self.ai_prefix,
             )
         return {self.memory_key: final_buffer}
-
     def save_context(self, inputs: Dict[str, Any], outputs: Dict[str, Any]) -> None:
         """Save context from this conversation to buffer. Pruned."""
         input_str, output_str = self._get_input_output(inputs, outputs)
