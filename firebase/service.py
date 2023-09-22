@@ -3,6 +3,7 @@ from firebase_admin import credentials,firestore,storage
 import os
 import datetime
 from utils.session_state import *
+from utils.cache import *
 import streamlit as st
 if not firebase_admin._apps:
     
@@ -62,25 +63,28 @@ def delete_folder( folder_path):
 
 def download(id,length):
     directory_path = id
-    # List all files in the directory
-    blobs = bucket.list_blobs(prefix=directory_path)
-    # Specify the local directory where you want to save the downloaded files
-    local_directory_path = "dataset/process"
-    # Iterate over each file in the directory and download it
-    count = 0
-    for blob in blobs:
+    if(not load_from_cache(id)):
+        # List all files in the directory
+        blobs = bucket.list_blobs(prefix=directory_path)
+        # Specify the local directory where you want to save the downloaded files
+        local_directory_path = "dataset/process"
+        # Iterate over each file in the directory and download it
+        count = 0
+        for blob in blobs:
 
-        st.progress(count/length, text=f'Getting {blob.name[len(directory_path):]}')
-        # Create the local file path by removing the directory path prefix
-        local_file_path = local_directory_path + blob.name[len(directory_path):]
-        local_folder_path = os.path.dirname(local_file_path)
-        # Download the file to the specified local path
-        if not os.path.exists(local_folder_path):
-            os.makedirs(local_folder_path)
-        blob.download_to_filename(local_file_path)
+            st.progress(count/length, text=f'Getting {blob.name[len(directory_path):]}')
+            # Create the local file path by removing the directory path prefix
+            local_file_path = local_directory_path + blob.name[len(directory_path):]
+            local_folder_path = os.path.dirname(local_file_path)
+            # Download the file to the specified local path
+            if not os.path.exists(local_folder_path):
+                os.makedirs(local_folder_path)
+            blob.download_to_filename(local_file_path)
 
-        count += 1
-
+            count += 1
+        ##Add to Cache
+        add_to_cache(id)
+    
 def load_all(sortby):
     
     if os.environ['PARSE_ALL_ENVIRONMENTS'] == "True":
@@ -114,6 +118,7 @@ def delete(id):
     delete_folder(id)
     model.delete()
     agents.delete()
+    delete_from_cache(id)
     
 
 def save(id,name,chain,options):
@@ -166,6 +171,7 @@ def save(id,name,chain,options):
     agents.set({
         'conversation':conversation
     })
+    add_to_cache(model.id)
     return model.id
     
 
