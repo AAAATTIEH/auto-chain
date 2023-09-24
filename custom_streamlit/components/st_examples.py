@@ -9,15 +9,15 @@ def st_examples():
     col1,col2,col3 = st.columns([1,1,1])
     examples = [
         {
-            "name":"Image Chat Agent",
+            "name":"Image Chat Agent:green [v0.0.4]",
             "id":"7eTRxzehOW4IBxKppjyb"
         },
         {
-            "name":"CSV Agent",
+            "name":"CSV Agent [v0.0.2]",
             "id":"cB6bpnpIQdiyBRXKtXVe"
         },
         {
-            "name":"Conversational Agent",
+            "name":"Conversational Agent [v0.0.1]",
             "id":"Gfwvc6yuSkIv9JnBpNtf"
         }
     ]

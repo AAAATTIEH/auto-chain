@@ -12,6 +12,8 @@ def st_chat_input():
              st.markdown('<span id = "button-after"></span>',unsafe_allow_html=True)
              st.button('Stop Generating',type="primary",on_click=func_stop_generating)
         user_question = st.chat_input("Ask a question about your documents:",disabled=disabled,key='chat-enabled',on_submit=submitted)    
+        #submitted()
+        #user_question = 'Hello'
         if user_question and st.session_state['execute']["ids"][st.session_state['execute']["current_id"]]["type"]=="Ready":
             st.markdown('<span id = "button-after"></span>',unsafe_allow_html=True)
             st.button('Stop Generating',type="primary",on_click=func_stop_generating)

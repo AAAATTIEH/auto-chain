@@ -1,3 +1,14 @@
+# <span style="color:rgb(255, 75, 75)">v0.0.5</span>
+### Agents
+- :green[**[+] Summary Agent** ] 
+
+### Tools
+* :green[**[+] Summarize Tool:**] Performs document summarization using LLM.
+* :green[**[+] File Path Finder:**] locates the file path of locally stored files.
+
+### General
+* Cache chat models for faster chat model loading time
+---
 # <span style="color:rgb(255, 75, 75)">v0.0.4</span>
 ### Agents
 - :green[**[+] Image Chat Agent** ] 

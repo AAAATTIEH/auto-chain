@@ -1,7 +1,7 @@
 import gc
 from streamlit.runtime.scriptrunner.script_run_context import get_script_run_ctx
 from streamlit.runtime.runtime import Runtime
-
+import streamlit as st
 # ...
 
 def st_runtime():
@@ -30,9 +30,14 @@ def session_id():
 runtime = st_runtime()
 
 if runtime:
+    s_id = session_id()
+
+
     session_info = runtime.get_client(session_id=session_id())
     if session_info:
+        
         request = getattr(session_info, 'request')
+
         host_name = request.host_name
         remote_ip = request.remote_ip
         headers = request.headers

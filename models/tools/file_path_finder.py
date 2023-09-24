@@ -6,9 +6,9 @@ from typing import  Dict, Optional
 from langchain.pydantic_v1 import  Field
 class FilePathFinderTool(BaseTool):
     name = "File Path Finder"
-    description = "Use this tool only to find the exact full file path if it's not in chat memory." \
-                  "The input to this tool must be a comma seperated string of keys to search about."\
-                  "It will return a simple string for the file path"
+    description = "Use this tool only to find the exact path of a file if it's not in chat memory" \
+                  "The input to this tool must be a comma seperated string of keys to search about"\
+                  "It will return a simple string for the image path"
     paths = []
     #paths: Optional[Dict] = Field(default_factory=dict)
     def _run(self, query:str):

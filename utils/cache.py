@@ -13,9 +13,8 @@ def delete_from_cache(id):
             shutil.rmtree(path)
         except Exception as e:
             pass 
-        print("Data Removed")
-    else:
-        print("ID does not exist")
+
+
     return ids
 def add_to_cache(id):
     cache_size =int(os.environ["CACHE_SIZE"])
@@ -37,10 +36,9 @@ def add_to_cache(id):
     destination_directory = f'dataset/cache/{id}'
     try:
         shutil.copytree(source_directory, destination_directory)
-        print(f"Directory '{source_directory}' copied to '{destination_directory}' successfully.")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-    print("Data Added")
+
 
 def load_from_cache(id):
     ## Load Metadata
@@ -52,7 +50,6 @@ def load_from_cache(id):
         source_directory = f'dataset/cache/{id}'
         try:
             shutil.copytree(source_directory, destination_directory)
-            print(f"Directory '{source_directory}' copied to '{destination_directory}' successfully.")
         except Exception as e:
             print(f"An error occurred: {str(e)}")
         return True
