@@ -1,2 +1,84 @@
-# AutoChain
-Autochain is a versatile and dynamic application designed to streamline the development and management of Langchain agents. Within Autochain, developers can effortlessly create and manage agents and chat models, while also having the capability to address agent behavior issues with granular detail. Moreover, Autochain is equipped with features such as efficient memory management, automatic agent selection based on input data and advanced functionality like parsing tables, images, and charts from agent observations all presented through an intuitively designed user interface.
+# Auto-Chain
+
+## Description
+
+Autochain is a versatile and dynamic `streamlit` application specifically crafted to simplify the process of prototyping Langchain agents. With Autochain, developers can effortlessly create and iterate on agent prototypes, streamlining the testing and development process. This user-friendly tool allows for easy agent management and behavior adjustments with exceptional precision.
+
+Autochain comes equipped with a range of features designed to enhance the prototyping experience. These include efficient memory management, automatic agent selection based on input data, and advanced functionalities like parsing tables, images, and charts from agent observations. All of these capabilities are seamlessly integrated into an intuitively designed user interface, making it a breeze to visualize and fine-tune agent prototypes.
+
+<p align="center">
+  <img src="https://i.ibb.co/QQrtRq0/Home-Page.png">
+
+</p>
+
+
+## Features
+
+- **Agent Management**: Easily create, modify, and manage Langchain agents.
+- **Chat Models**: Develop and fine-tune chat models for seamless interactions.
+- **Granular Behavior Control**: Address agent behavior issues with fine-grained adjustments.
+- **Efficient Memory Management**: Optimize memory usage for better performance.
+- **Automatic Agent Selection**: Choose agents automatically based on input data.
+- **Advanced Functionality**: Parse tables, images, and charts from agent observations.
+- **Intuitive User Interface**: A user-friendly design for a hassle-free experience.
+
+## Tutorial Video
+
+Learn how to use Autochain with our tutorial video: [Watch Tutorial](https://www.youtube.com/watch?v=ZpgRYeSTwlU)
+
+## Getting Started
+
+Follow these instructions to get Autochain up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Python 3.7 or higher installed on your system.
+- [Git](https://git-scm.com/) for version control.
+- Tesseract OCR Engine
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/auto-chain.git
+   ```
+2. Installing Tesseract OCR
+- Windows
+   - Download the Tesseract OCR installer for Windows from the official repository: https://github.com/UB-Mannheim/tesseract/wiki
+   - Run the installer and follow the installation instructions.
+   - Add the Tesseract installation directory to your system's PATH environment variable.
+- Linux
+   - On Linux, you can install Tesseract using your distribution's package manager. For example, on Ubuntu:
+     ```bash
+     sudo apt-get install tesseract-ocr
+     ```
+3. Navigate to the project directory:
+   ```bash
+   cd auto-chain
+   ```
+4. Install the required Python packages:
+   ```
+   pip install -r requirements.txt
+   ```
+### Usage
+1. Start Autochain:
+   ```bash
+   streamlit run autochain.py
+   ```
+2. Open your web browser and access Autochain at http://localhost:8501.
+## Contributing
+We welcome contributions to Autochain! To contribute, follow these steps:
+
+1. Fork the repository on GitHub.
+2. Clone your forked repository to your local machine.
+3. Create a new branch for your feature or bug fix.
+4. Make your changes and commit them with descriptive commit messages.
+5. Push your changes to your GitHub fork.
+6. Open a pull request to the master branch of the original repository.
+
+### Contact
+For any questions or inquiries, please contact us at ali.attieh.30797@gmail.com.
+
+Enjoy using Autochain! We look forward to your contributions and feedback.
