@@ -1,5 +1,13 @@
 # Auto-Chain
 
+## Branches
+
+We maintain two main branches in this repository:
+
+- **stable**: The `stable` branch is specifically created for the LLM Hackathon on Streamlit. It is intended to provide a stable and reliable version of Auto-Chain for the hackathon event.
+
+- **master**: The `master` branch is used for the latest updates and development of Auto-Chain. It may include new features, enhancements, and bug fixes. Please note that this branch may occasionally be less stable due to ongoing development efforts.
+
 ## Description
 
 Autochain is a versatile and dynamic `streamlit` application specifically crafted to simplify the process of prototyping Langchain agents. With Autochain, developers can effortlessly create and iterate on agent prototypes, streamlining the testing and development process. This user-friendly tool allows for easy agent management and behavior adjustments with exceptional precision.
