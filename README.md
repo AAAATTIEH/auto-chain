@@ -38,6 +38,7 @@ Learn how to use Autochain with our tutorial video: [Watch Tutorial](https://www
 
 Follow these instructions to get Autochain up and running on your local machine for development and testing purposes.
 
+
 ### Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -70,6 +71,20 @@ Before you begin, ensure you have met the following requirements:
    ```
    pip install -r requirements.txt
    ```
+
+## Environment Variables
+Before running Auto-Chain, you need to configure your environment variables. Follow these steps:
+
+1. Locate the `.env_template` file in the project root directory.
+
+2. Rename `.env_template` to `.env`. Make sure the file is named exactly `.env`.
+
+3. Open the newly renamed `.env` file in a text editor.
+
+4. Replace the placeholder values in the `.env` file with your actual API keys, credentials, and configuration settings.
+
+5. Save the changes to the `.env` file.
+
 ### Usage
 1. Start Autochain:
    ```bash
