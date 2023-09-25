@@ -101,7 +101,10 @@ We welcome contributions to Autochain! To contribute, follow these steps:
 5. Push your changes to your GitHub fork.
 6. Open a pull request to the master branch of the original repository.
 
-### Contact
+## Contact
 For any questions or inquiries, please contact us at ali.attieh.30797@gmail.com.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/AAAATTIEH/auto-chain/blob/master/LICENSE) file for details.
 
 Enjoy using Autochain! We look forward to your contributions and feedback.
