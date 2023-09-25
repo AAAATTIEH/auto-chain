@@ -88,7 +88,7 @@ Before running Auto-Chain, you need to configure your environment variables. Fol
 ### Usage
 1. Start Autochain:
    ```bash
-   streamlit run autochain.py
+   streamlit run init.py
    ```
 2. Open your web browser and access Autochain at http://localhost:8501.
 ## Contributing
