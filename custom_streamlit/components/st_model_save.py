@@ -27,46 +27,46 @@ def save_df():
 def st_model_save():
     with st.sidebar:
         name = st.text_input("Name",st.session_state.model["name"])
-        container = st.container()
+        if st.session_state.model['show']:
+            container = st.container()
 
-        df = issues_session_state()
-        if(len(df) == 0):
-            df = [{"issue":"Description Here"}]
-        df =  pd.DataFrame(df) 
-        if true_key_session_state('r-'):
-            st.text_input('Hello')
-        edited_df = st.data_editor(
-            df,
-            use_container_width=True,
-            column_config={
-                "issue": "Issue"
-            },
-            num_rows="dynamic",
-            hide_index=True,
-            key=f'{st.session_state.agent}',
-            on_change=save_df,
-        )
+            df = issues_session_state()
+            if(len(df) == 0):
+                df = [{"issue":"Description Here"}]
+            df =  pd.DataFrame(df) 
+            
+            edited_df = st.data_editor(
+                df,
+                use_container_width=True,
+                column_config={
+                    "issue": "Issue"
+                },
+                num_rows="dynamic",
+                hide_index=True,
+                key=f'{st.session_state.agent}',
+                on_change=save_df,
+            )
         
-        with container:
-        
-            if(st.session_state.model['id']=="NEW"):
-                options = st.multiselect(
-                'Choose Agents',
-                list(st.session_state.conversation_chain.keys()),
-                list(st.session_state.conversation_chain.keys()))
-            else:
-                options = list(st.session_state.conversation_chain.keys())
-            unsaved = st.empty()
-            if st.button("Save",use_container_width=True,type='primary'):
-                if not name:
-                    st.error('Please provide a name')
-                    return
-                my_bar = st.progress(0, text=f'Operation in Progress')
-                with my_bar:
-                    id = save(st.session_state.model["id"],name,st.session_state.conversation_chain,options)
-                    load_session_state()
-                    st.success(f'Chat Model Saved ID {id}')
-                    st.experimental_set_query_params(model_id=id)
-                    st.session_state.model['id'] = id
-            if(compare_session_state()):
-                unsaved.error("**Unsaved Changes**")        
+            with container:
+            
+                if(st.session_state.model['id']=="NEW"):
+                    options = st.multiselect(
+                    'Choose Agents',
+                    list(st.session_state.conversation_chain.keys()),
+                    list(st.session_state.conversation_chain.keys()))
+                else:
+                    options = list(st.session_state.conversation_chain.keys())
+                unsaved = st.empty()
+                if st.button("Save",use_container_width=True,type='primary'):
+                    if not name:
+                        st.error('Please provide a name')
+                        return
+                    my_bar = st.progress(0, text=f'Operation in Progress')
+                    with my_bar:
+                        id = save(st.session_state.model["id"],name,st.session_state.conversation_chain,options)
+                        load_session_state()
+                        st.success(f'Chat Model Saved ID {id}')
+                        st.experimental_set_query_params(model_id=id)
+                        st.session_state.model['id'] = id
+                if(compare_session_state()):
+                    unsaved.error("**Unsaved Changes**")        
