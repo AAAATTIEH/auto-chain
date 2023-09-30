@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 from utils.helpers import remove_dir
+import streamlit as st
 def delete_from_cache(id):
     path = f'dataset/cache/{id}'
     ids = load_metadata()
@@ -32,7 +33,7 @@ def add_to_cache(id):
     ## Save Metadata
     save_metadata(ids)
     ## Copy Directory
-    source_directory = 'dataset/process'
+    source_directory = f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}'
     destination_directory = f'dataset/cache/{id}'
     try:
         shutil.copytree(source_directory, destination_directory)
@@ -45,8 +46,8 @@ def load_from_cache(id):
     ids = load_metadata()
     ## Append ID
     if(id in ids):
-        remove_dir('dataset/process')
-        destination_directory = 'dataset/process'
+        remove_dir(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}')
+        destination_directory = f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}'
         source_directory = f'dataset/cache/{id}'
         try:
             shutil.copytree(source_directory, destination_directory)

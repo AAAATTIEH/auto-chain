@@ -1,3 +1,13 @@
+# <span style="color:rgb(255, 75, 75)">v0.0.6</span>
+
+### General
+* Allow usage by multiple users at the same time.
+* Allow multiple sessions for each user at the same time.
+* Stop agent loop in case of agent changing, conversation resetting and message deletion.
+* Disable saving feature for example chat models
+* Delete inactive sessions
+
+---
 # <span style="color:rgb(255, 75, 75)">v0.0.5</span>
 ### Agents
 - :green[**[+] Summary Agent** ] 

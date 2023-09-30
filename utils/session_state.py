@@ -8,6 +8,10 @@ def load_session_state():
 def init_session_state():
     if "url" not in st.session_state:
         st.session_state.url = {"clicked":False,"path":""}
+    if "user_id" not in st.session_state:
+        st.session_state.user_id = None
+    if "session_id" not in st.session_state:
+        st.session_state.session_id = None
     if "chat_input" not in st.session_state:
         st.session_state.chat_input = None
     if "execute" not in st.session_state:

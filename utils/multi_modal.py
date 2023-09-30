@@ -1,6 +1,6 @@
 import re
 import json
-
+import streamlit as st
 import pandas as pd
 def st_multi_modal(container,input_string='',subcontainers = []):
     objects = extract_multi_modal(input_string)
@@ -13,11 +13,21 @@ def st_multi_modal(container,input_string='',subcontainers = []):
         if(object['type'] == 'text'):
                 subcontainer.write(object['content'])
         elif(object['type'] == 'image'):
-                subcontainer.image(object['source'],width=250)
+                object['source'] = subcontainer.image(object['source'].replace(
+                                            'dataset/process',
+                                            f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}'
+                                    )
+                                   ,width=250)
         elif(object['type'] == 'chart'):
-                subcontainer.image(object['source'])
+                subcontainer.image(object['source'].replace(
+                                            'dataset/process',
+                                            f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}'
+                                    ))
         elif(object['type'] == 'table'):
-                data = pd.read_csv(object['source'])
+                data = pd.read_csv(object['source'].replace(
+                                            'dataset/process',
+                                            f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}'
+                                    ))
                 data.columns = (' ' * i for i in range(data.shape[1]))
                 
                 subcontainer.dataframe(data,hide_index=True)

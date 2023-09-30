@@ -10,15 +10,15 @@ def get_conversation_chain(conversation=None):
  
     embeddings = OpenAIEmbeddings()
     try:
-        vectorstore = FAISS.load_local(f"dataset/process/input/vector", embeddings)
+        vectorstore = FAISS.load_local(f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/vector", embeddings)
     except:
         vectorstore = None
     try:
-        csvs = get_file_names(f"dataset/process/input/tables")
+        csvs = get_file_names(f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/tables")
     except:
         csvs = None
     try:
-        images = json.loads(open(f'dataset/process/input/images/metadata.json', 'r').read())
+        images = json.loads(open(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/images/metadata.json', 'r').read())
         if(len(images) == 0):
             images = None
     except:

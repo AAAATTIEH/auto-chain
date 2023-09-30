@@ -28,7 +28,7 @@ bucket = storage.bucket()
 
 
 def upload(id):
-    folder_path = "dataset/process"
+    folder_path = f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}"
     count = 0
     length = 0
     for root, dirs, files in os.walk(folder_path):
@@ -67,7 +67,7 @@ def download(id,length):
         # List all files in the directory
         blobs = bucket.list_blobs(prefix=directory_path)
         # Specify the local directory where you want to save the downloaded files
-        local_directory_path = "dataset/process"
+        local_directory_path = f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}"
         # Iterate over each file in the directory and download it
         count = 0
         for blob in blobs:
@@ -90,7 +90,7 @@ def load_all(sortby):
     if os.environ['PARSE_ALL_ENVIRONMENTS'] == "True":
         doc_ref = db.collection('data').where('show','==',True).order_by(sortby, direction=firestore.Query.DESCENDING)
     else:
-        doc_ref = db.collection('data').where('show','==',True).where('environment','==',os.environ['ENVIRONMENT']).order_by(sortby, direction=firestore.Query.DESCENDING)
+        doc_ref = db.collection('data').where('show','==',True).where('user','==',st.session_state.user_id).order_by(sortby, direction=firestore.Query.DESCENDING)
     documents = doc_ref.get()
     names = []
     for doc in documents:
@@ -158,7 +158,8 @@ def save(id,name,chain,options):
             'total_issues':total_issues,
             'created_at':timestamp,
             'last_updated':timestamp,
-            'environment':os.environ['ENVIRONMENT']
+            'environment':os.environ['ENVIRONMENT'],
+            'user':st.session_state.cookie
         })
     else: 
         model.update({

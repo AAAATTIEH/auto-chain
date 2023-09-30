@@ -91,6 +91,18 @@ Before running Auto-Chain, you need to configure your environment variables. Fol
    streamlit run init.py
    ```
 2. Open your web browser and access Autochain at http://localhost:8501.
+
+
+# Deploy on Streamlit Sharing
+If you want to deploy on Streamlit platform, follow these steps:
+
+1. Visit the Streamlit Sharing website: https://www.streamlit.io
+2. Log in with your Streamlit account.
+3. Click "New App."
+4. Connect your GitHub repository to Streamlit Sharing.
+5. Configure deployment settings, including the branch to deploy from and the command to run your app.
+6. Click "Deploy."
+
 ## Contributing
 We welcome contributions to Autochain! To contribute, follow these steps:
 

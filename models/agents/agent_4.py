@@ -15,8 +15,9 @@ from langchain.agents import ZeroShotAgent, AgentExecutor
 from models.llms.llms import *
 from models.tools.file_path_finder import FilePathFinderTool
 import json
+import streamlit as st
 def agent(vectorstore):
-    paths =json.loads(open(f'dataset/process/input/vector/metadata.json', 'r').read())
+    paths =json.loads(open(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/vector/metadata.json', 'r').read())
     tools = [
              FilePathFinderTool(paths = paths),
              SummarizeFileTool(vectorstore=vectorstore,paths = paths)

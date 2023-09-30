@@ -1,7 +1,7 @@
 import os
 import shutil
 import tempfile
-
+import streamlit as st
     
 def saveTemp(file, folder_name="temp"):
     
@@ -57,10 +57,11 @@ def remove_dir(path):
         pass
 
 def reset_dataset_directory():
-    remove_dir('dataset/process')
-    os.makedirs('dataset/process/input/tables')
-    os.makedirs('dataset/process/input/images')
-    os.makedirs('dataset/process/input/vector')
-    os.makedirs('dataset/process/output/tables')
-    os.makedirs('dataset/process/output/images')
-    os.makedirs('dataset/process/output/vector')
+    remove_dir(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}')
+    os.makedirs(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/tables')
+    os.makedirs(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/images')
+    os.makedirs(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/vector')
+    os.makedirs(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/tables')
+    os.makedirs(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/images')
+    os.makedirs(f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/vector')
+    

@@ -222,15 +222,15 @@ class CustomHandler(BaseCallbackHandler):
             self.content = self.content +':red[An Error Happened]'+'\n'
         elif 'AxesSubplot' in output:
             fig = plt.gcf()
-            path = f'dataset/process/output/images/image{st.session_state.model["index"]}.png'
-            dir = 'dataset/process/output/images'
+            path = f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/images/image{st.session_state.model["index"]}.png'
+            dir = f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/images'
             if(not os.path.exists(dir)):
                 os.makedirs(dir)
             st.session_state.model["index"]+=1
             fig.savefig(path)
             plt.clf() 
             self.content = self.content +'<{"type":"chart","source" : "'+path+'"}>'+'\n'
-        elif f'dataset/process/input/images' in output:
+        elif f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/images' in output:
             self.content = self.content +'<{"type":"image","source" : "'+output.strip()+'"}>'+'\n'
         else:
             tables = get_table(output)
@@ -239,10 +239,10 @@ class CustomHandler(BaseCallbackHandler):
             else:
                 for table in tables:
                     df = pd.DataFrame(table)
-                    dir = 'dataset/process/output/tables'
+                    dir = f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/tables'
                     if(not os.path.exists(dir)):
                         os.makedirs(dir)
-                    path = f'dataset/process/output/tables/table{st.session_state.model["index"]}.csv'
+                    path = f'dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output/tables/table{st.session_state.model["index"]}.csv'
                     df.to_csv(path,index=False)
                     st.session_state.model["index"]+= 1
                     self.content = self.content +'<{"type":"table","source" : "'+path+'"}>'+'\n'

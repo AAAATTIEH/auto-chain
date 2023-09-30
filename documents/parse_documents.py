@@ -11,7 +11,7 @@ from langchain.document_loaders import WebBaseLoader
 from langchain.document_loaders.image import UnstructuredImageLoader
 from langchain.document_loaders import Docx2txtLoader
 from models.tools.image_caption import ImageCaptionTool
-
+import streamlit as st
 
 def parse_pdf(file):
     tmp_file = saveTemp(file)
@@ -24,7 +24,7 @@ def path_to_blob(file_path):
         blob = file.read()
     return blob
 def parse_csv(file):
-    tmp_file = saveTemp(file,"dataset/process/input/tables")
+    tmp_file = saveTemp(file,f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/tables")
     tmp_file_path = tmp_file["file"]
 
     return tmp_file_path
@@ -51,7 +51,7 @@ def parse_txt(file):
     
     return tmp_file_path,data
 def parse_image(file):
-    tmp_file = saveTemp(file,"dataset/process/input/images")
+    tmp_file = saveTemp(file,f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/input/images")
     tmp_file_path = tmp_file["file"]
     metadata = ImageCaptionTool().run(tmp_file_path)
     try:

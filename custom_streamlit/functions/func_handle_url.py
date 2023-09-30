@@ -30,7 +30,7 @@ def func_handle_url(model_id):
                 #st.experimental_rerun()
         my_bar.empty()
     elif(model_id == 'chat' and not st.session_state.processed):
-        remove_dir("dataset/process/output")
+        remove_dir(f"dataset/process/{st.session_state.user_id}/{st.session_state.session_id}/output")
         my_bar = st.empty()
 
         my_bar.progress(0, text="Operation in progress")

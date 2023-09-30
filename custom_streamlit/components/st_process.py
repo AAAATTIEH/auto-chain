@@ -18,7 +18,8 @@ def st_process():
                 st.session_state.model = {
                     'id':'NEW',
                     'index':0,
-                    'name':''
+                    'name':'',
+                    'show':True
                 }
                 
                 st.experimental_rerun()
