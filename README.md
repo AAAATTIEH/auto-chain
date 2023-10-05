@@ -1,13 +1,5 @@
 # Auto-Chain
 
-## Branches
-
-We maintain two main branches in this repository:
-
-- **stable**: The `stable` branch is specifically created for the LLM Hackathon on Streamlit. It is intended to provide a stable and reliable version of Auto-Chain for the hackathon event.
-
-- **master**: The `master` branch is used for the latest updates and development of Auto-Chain. It may include new features, enhancements, and bug fixes. Please note that this branch may occasionally be less stable due to ongoing development efforts.
-
 ## Description
 
 Autochain is a versatile and dynamic `streamlit` application specifically crafted to simplify the process of prototyping Langchain agents. With Autochain, developers can effortlessly create and iterate on agent prototypes, streamlining the testing and development process. This user-friendly tool allows for easy agent management and behavior adjustments with exceptional precision.
@@ -19,6 +11,13 @@ Autochain comes equipped with a range of features designed to enhance the protot
 
 </p>
 
+## Branches
+
+We maintain two main branches in this repository:
+
+- **stable**: The `stable`` branch is intended to provide a reliable and well-tested version of Auto-Chain.
+
+- **master**: The `master` branch is used for the latest updates and development of Auto-Chain. It may include new features, enhancements, and bug fixes. Please note that this branch may occasionally be less stable due to ongoing development efforts.
 
 ## Features
 
@@ -72,7 +71,7 @@ Before you begin, ensure you have met the following requirements:
    pip install -r requirements.txt
    ```
 
-## Environment Variables
+### Environment Variables
 Before running Auto-Chain, you need to configure your environment variables. Follow these steps:
 
 1. Locate the `.env_template` file in the project root directory.
@@ -93,7 +92,7 @@ Before running Auto-Chain, you need to configure your environment variables. Fol
 2. Open your web browser and access Autochain at http://localhost:8501.
 
 
-# Deploy on Streamlit Sharing
+## Deploy on Streamlit Sharing
 If you want to deploy on Streamlit platform, follow these steps:
 
 1. Visit the Streamlit Sharing website: https://www.streamlit.io
